@@ -1,6 +1,6 @@
 # [OnlyTrades](https://onlytrades.live)
 
-### Trade Automation Refined.
+### Trade Automation [Refined.](https://onlytrades.live)
 
 Homepage: [https://onlytrades.live](https://onlytrades.live)
 
