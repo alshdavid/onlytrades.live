@@ -25,3 +25,13 @@ Early access is free. To join early access, you can contact me at alshdavid@gmai
 Everything is sandboxed and scoped. Bots cannot access other trader information. I would still reccomend only trading with a demo account.
 
 The service is written in Rust and has a low latency link to the broker server. Trades are executed over a persistant socket connect to the broker and each bot has its own socket connection.
+
+### Supported Languages
+
+Currently TypeScript is supported. I will be adding Rust bots too for extra speedy low latency/cost trading. Rust is also great for LLMs because they are able to work with the strict compiler to figure out what's wrong.
+
+### TradingView
+
+TradingView webhooks are supported. Just set up a trigger and paste the trigger code as the webhook body.
+
+Currently only v5 pinescript is supported. For some reason, strategies written in pinescript v6 sends broken alert IDs.
