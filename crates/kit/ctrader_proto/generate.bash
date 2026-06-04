@@ -7,7 +7,9 @@
 # 1) Install protoc
 # 2) Run "cargo install protoc-gen-prost"
 
-rm -rf ./lib.rs
+rm -rf ./lib.rs ./openapi-proto-messages
+
+curl -L https://github.com/spotware/openapi-proto-messages/archive/refs/heads/main.tar.gz | tar -xzf - -C ./openapi-proto-messages
 
 protoc --plugin=protoc-gen-prost=$(which protoc-gen-prost) \
   --proto_path=openapi-proto-messages \

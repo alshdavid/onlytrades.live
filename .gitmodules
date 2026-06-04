@@ -1,3 +1,0 @@
-[submodule "crates/kit/ctrader_proto/openapi-proto-messages"]
-	path = crates/kit/ctrader_proto/openapi-proto-messages
-	url = https://github.com/spotware/openapi-proto-messages.git
