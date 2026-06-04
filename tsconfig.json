@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "types": [
+      "node"
+    ],
+    "jsx": "react",
+    "jsxFactory": "h"
+  },
+  "include": [
+    "./.scripts/**/*.mts",
+    "./nodejs_bot/**/*.mts",
+    "./nodejs_bot/**/*.cjs",
+    "./client/**/*.mts",
+    "./client/**/*.ts",
+    "./client/**/*.tsx",
+  ]
+}

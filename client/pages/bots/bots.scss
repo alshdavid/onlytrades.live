@@ -1,0 +1,54 @@
+@use "../../scss/variables.scss" as *;
+@use "../../scss/mixins.scss" as *;
+
+.page.page-bots {
+  > main > div {
+    padding-top: $spacing-08;
+  }
+
+  .list-block {
+    & > table {
+      width: 100%;
+      border: none !important;
+      border-collapse: collapse;
+      // margin-bottom: $spacing-04;
+
+      thead {
+        background-color: $color-blue-50;
+        color: $color-blue-900;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: $spacing-02 $spacing-04;
+
+        // &.wrap {
+        //   width: 1%;
+        //   white-space: normal;
+        // }
+
+        &:last-of-type {
+          text-align: right;
+        }
+      }
+
+      tr {
+        // &:nth-child(2n) {
+        // background-color: $color-blue-50;
+
+        // }
+        border-bottom: 1px solid $color-grey-200;
+
+        &:last-of-type {
+          border: none;
+        }
+      }
+
+      .btn {
+        padding: $spacing-01 $spacing-02;
+        background-color: white;
+      }
+    }
+  }
+}

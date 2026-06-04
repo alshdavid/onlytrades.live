@@ -1,0 +1,88 @@
+name: Create Github Release
+
+on:
+  push:
+    branches: ["main"]
+
+  workflow_dispatch:
+
+concurrency:
+  group: "main"
+  cancel-in-progress: true
+
+
+
+jobs:
+  build_linux_x86_64:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+
+      # Rust
+      - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - run: which cargo && cargo --version
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      # Nodejs
+      - run: mkdir -p $HOME/.local/nodejs && VERSION=$(curl -sL https://nodejs.org/dist/index.tab | awk 'NR > 1 && $10 != "-" {print $1; exit}') && curl -L https://nodejs.org/download/release/$VERSION/node-$VERSION-linux-x64.tar.gz | tar --strip-components=1 -xzf - -C $HOME/.local/nodejs && echo "$HOME/.local/nodejs/bin" >> $GITHUB_PATH
+      - run: which node && node --version
+
+      # Deps
+      - run: npm install
+      - run: cargo fetch
+
+      # Build
+      - run: node ./.scripts/build.mts
+      - run: cargo build --release -p onlytrades
+      - run: mkdir -p artifacts && cd target/release && tar -czf ../../artifacts/onlytrades_linux_arm64.tar.gz onlytrades 
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: onlytrades_linux_x86_64
+          path: ${{ github.workspace }}/artifacts/**/*
+          if-no-files-found: error
+          retention-days: 1
+
+  build_linux_arm64:
+    runs-on: ubuntu-22.04-arm
+    steps:
+      - uses: actions/checkout@v6
+
+      # Rust
+      - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+      - run: which cargo && cargo --version
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      # Nodejs
+      - run: mkdir -p $HOME/.local/nodejs && VERSION=$(curl -sL https://nodejs.org/dist/index.tab | awk 'NR > 1 && $10 != "-" {print $1; exit}') && curl -L https://nodejs.org/download/release/$VERSION/node-$VERSION-linux-arm64.tar.gz | tar --strip-components=1 -xzf - -C $HOME/.local/nodejs && echo "$HOME/.local/nodejs/bin" >> $GITHUB_PATH
+      - run: which node && node --version
+
+      # Deps
+      - run: npm install
+      - run: cargo fetch
+
+      # Build
+      - run: node ./.scripts/build.mts
+      - run: cargo build --release -p onlytrades
+      - run: mkdir -p artifacts && cd target/release && tar -czf ../../artifacts/onlytrades_linux_arm64.tar.gz onlytrades 
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: onlytrades_linux_arm64
+          path: ${{ github.workspace }}/artifacts/**/*
+          if-no-files-found: error
+          retention-days: 1
+
+  github_release:
+    runs_on: ubuntu-22.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v8
+        with: { path: artifacts }
+      - run: ls -l -a artifacts

@@ -1,0 +1,25 @@
+[package]
+name = "onlytrades_bot_service"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "./lib.rs"
+
+[dependencies]
+platform_ctrader_service = { workspace = true }
+platform_log_service = { workspace = true }
+platform_models = { workspace = true }
+platform_plugins = { workspace = true }
+platform_process = { workspace = true }
+platform_repository_turso = { workspace = true }
+
+anyhow = { workspace = true }
+chrono = { workspace = true, features = ["serde"] }
+dashmap = { workspace = true }
+tokio = { workspace = true }
+uuid = { workspace = true, features = ["serde", "v4", "v7"] }

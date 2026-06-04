@@ -1,0 +1,22 @@
+[package]
+name = "onlytrades_plugins"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "./lib.rs"
+
+[dependencies]
+kit_ctrader = { workspace = true }
+platform_ctrader_service = { workspace = true }
+platform_process = { workspace = true }
+
+anyhow = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+tokio = { workspace = true, features = [] }
+uuid = { workspace = true, features = ["serde", "v4", "v7"] }

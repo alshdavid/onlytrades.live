@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- await include('../../partials/head.partial.ejs', { lazyBundle: true }) %>
+  </head>
+  <body class="page page-index">
+    <%- await include('../../partials/top-nav.partial.ejs') %>
+    <main>
+      <section class="hero">
+        <div>
+          <h1>Trade Automation <span class="highlight">Refined.</span></h1>
+          <div class="text">
+            <p>
+              BYO broker, deploy your algorithm, and automate your strategies.
+            </p>
+            <p>We'll handle the rest.</p>
+          </div>
+          <div>
+            <a class="btn solid blue" href="/api/auth/login">Get Started</a>
+            <a class="btn blue" href="https://github.com/alshdavid/onlytrades.live">Read Docs</a>
+          </div>
+
+        </div>
+      </section>
+      <section class="features" id="about">
+        <div class="content-max-width l">
+          <div class="block">
+            <h2>Works Everywhere</h2>
+            <ul>
+              <li>Supports Hundreds of Brokers</li>
+              <li>Serverless Trading Bots</li>
+              <li>Trade on TradingView Webhook Alerts</li>
+              <li>REST API for custom integrations</li>
+              <li>Marketplace for Algorithms</li>
+            </ul>
+          </div>
+          <div class="block">
+            <!-- <h2>Transparent Pricing</h2>
+            <ul>
+              <li>Usage based pricing</li>
+              <li>Only pay for what you use</li>
+              <li>Fast, secure, and boringly reliable</li>
+              <li>No arbitrary limits</li>
+            </ul> -->
+            <h2>Affordable</h2>
+            <ul>
+              <li>Free for Early Access</li>
+              <li>Share and Monetize your Bots</li>
+              <li>Fast, secure, and boringly reliable</li>
+              <li>Access to GPU accelerated Bots</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <section class="more-info content-max-width">
+        <h2>Pricing</h2>
+        <p>
+          OnlyTrades makes automated trading accessible to everyone,
+          regardless of their technical expertise.
+        </p>
+        <!-- <p>
+          Our pricing is transparent and based on usage, so you only pay for what
+          you use.
+        </p> -->
+        <!-- <p>
+          For now, this is free and available in early access. Contact us if
+          you're interested in signing up.
+        </p> -->
+        <p>
+          Free for early access. <a data-href="bWFpbHRvOmFsc2hkYXZpZCtvbmx5dHJhZGVzQGdtYWlsLmNvbQ==">Contact for access.</a>
+        </p>
+
+        <p>
+          To request features or report bug, post here: 
+        </p>
+        <p><a href="https://github.com/alshdavid/onlytrades.live/issues">https://github.com/alshdavid/onlytrades.live/issues</a></p>
+
+        <br />
+        <h2>Broker Support</h2>
+        <p>
+          You can use OnlyTrades to automate trading on any broker that has a
+          cTrader backend.
+        </p>
+        <p>Most brokers offer cTrader, some examples;</p>
+        <ul>
+          <li>IC Markets</li>
+          <li>Pepperstone</li>
+          <li>FxPro</li>
+          <li>FP Markets</li>
+          <li>BlackBull Markets</li>
+          <li>Skilling</li>
+          <li>RoboForex</li>
+          <li>Fusion Markets</li>
+          <li>Tradeview Markets</li>
+          <li>Axi</li>
+          <li>GO Markets</li>
+        </ul>
+        <p>And many more</p>
+
+        <br />
+        <h2>How It Works</h2>
+
+        <h3>Rest API</h3>
+
+        <p>
+          OnlyTrades provides a REST API to execute trades, on both demo
+          and live accounts.
+        </p>
+
+        <p>
+          You can write your own trading algorithms and use this REST API to
+          execute the trades automatically.
+        </p>
+        <br />
+
+        <h3>TradingView</h3>
+
+        <p>
+          Using the REST API, you can send alerts from your TradingView strategies
+          to trigger trades automatically.
+        </p>
+        <br />
+
+        <h3>Hosted Bots</h3>
+        <p>
+          OnlyTrades provides a hosted bot engine that allows you to host your
+          trading algorithms and execute them on our platform
+        </p>
+        <p>Hosted bots will enjoy the lowest execution latency</p>
+        <p>Our hosted bots support;</p>
+        <ul>
+          <li>JavaScript / TypeScript</li>
+          <li>Rust (coming soon)</li>
+          <li>C/C++ (coming soon)</li>
+          <li>Python (coming soon)</li>
+          <li>Any language that can consume dynamic libraries (.dll/.so)</li>
+        </ul>
+        <br />
+
+        <h3>AI Enhanced Bots <span>Coming Soon</span></h3>
+        <p>
+          Hosted bots can be run on GPU accelerated hardware,
+          allowing them to leverage AI to enhance trading decisions
+        </p>
+        <p>
+          High performance CPU hardware is also available for bots
+          that use CPU inference
+        </p>
+        <p>
+          Bots can also call out to third party APIs for external decisioning engines
+        </p>
+        <br />
+        
+        <h3>Market Place <span>Coming Soon</span></h3>
+        <p>
+          For traders that want a no-code solution, OnlyTrades provides a market
+          place where traders can leverage bots written by other traders.
+        </p>
+        <p>
+          You can evaluate marketplace statistics and leaderboards to see which
+          bots are performing the best.
+        </p>
+        <p>
+          For bot authors, the OnlyTrades marketplace allows you to publish your
+          bots and earn income from their usage.
+        </p>
+        <br />
+
+        <h2>About The Author</h2>
+        <p>
+          OnlyTrades is developed by David Alsh. An engineer with decades of experience 
+          in software development, and a passion for trading and AI.
+        </p>
+
+        <p>
+          OnlyTrades was originally a personal tool developed to help automate
+          trading strategies. I decided to grow it into a platform that can help
+          others enter the world of trade automation.
+        </p>
+
+        <p>
+          The service is written in Rust, is highly reliable, high performance,
+          and that allows it to be a more affordable option than what is available
+          from traditional trading platforms.
+        </p>
+
+        <p>
+          <a href="https://www.linkedin.com/in/alshdavid">LinkedIn</a>
+        </p>
+        <p><a href="https://github.com/alshdavid">GitHub</a></p>
+      </section>
+    </main>
+
+    <footer></footer>
+
+    <script>
+      for (const link of Array.from(document.querySelectorAll('*[data-href]'))) {
+        link.href = `${atob(link.getAttribute('data-href'))}`
+      }
+    </script>
+  </body>
+</html>

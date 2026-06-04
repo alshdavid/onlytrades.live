@@ -1,0 +1,16 @@
+[package]
+name = "onlytrades_turso"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "./lib.rs"
+
+[dependencies]
+std_ext = { package = "onlytrades_std_ext", path = "../std_ext" }
+anyhow = { workspace = true }
+libsql = { workspace = true }

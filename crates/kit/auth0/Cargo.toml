@@ -1,0 +1,20 @@
+[package]
+name = "onlytrades_auth0"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "./lib.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+base64 = { workspace = true }
+jsonwebtoken = { workspace = true, features = ["rust_crypto"] }
+reqwest = { workspace = true, features = ["json"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+url = { workspace = true }

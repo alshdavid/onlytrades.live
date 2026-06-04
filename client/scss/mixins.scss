@@ -1,0 +1,25 @@
+@use "./variables.scss" as *;
+
+@mixin mobile {
+  @media (max-width: #{$page-width}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$page-width + 1}) {
+    @content;
+  }
+}
+
+@mixin content-max-width {
+  @include mobile() {
+    padding: 0 12px;
+  }
+
+  @include desktop() {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}

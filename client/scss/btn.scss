@@ -1,0 +1,58 @@
+@use "./variables.scss" as *;
+@use "./mixins.scss" as *;
+
+.btn {
+  display: inline-block;
+  border: 1px solid $color-grey-700;
+  padding: $spacing-02 $spacing-04;
+  background-color: transparent;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:disabled,
+  &[disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:active {
+    opacity: 0.5;
+  }
+
+  &.blue {
+    color: $color-blue-900;
+    border-color: $color-blue-900;
+
+    &.solid {
+      color: white;
+      background-color: $color-blue-900;
+    }
+  }
+
+  &.red {
+    color: $color-red-900;
+    border-color: $color-red-900;
+
+    &.solid {
+      color: white;
+      background-color: $color-red-900;
+    }
+  }
+
+  &.green {
+    color: $color-green-900;
+    border-color: $color-green-900;
+
+    &.solid {
+      color: white;
+      background-color: $color-green-900;
+    }
+  }
+}

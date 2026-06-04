@@ -1,0 +1,37 @@
+@use "../../scss/variables.scss" as *;
+@use "../../scss/mixins.scss" as *;
+
+.page.page-bots_deploy_id {
+  > main > div {
+    padding-top: $spacing-08;
+  }
+
+  .list-block form {
+    padding: 0 $spacing-04 $spacing-08;
+  }
+
+  label,
+  .label {
+    display: block;
+    margin-bottom: $spacing-04;
+  }
+
+  p {
+    color: $color-blue-900;
+    margin-bottom: $spacing-02;
+  }
+
+  textarea {
+    font-family: monospace;
+  }
+
+  .btns {
+    margin-top: $spacing-08;
+
+    .btn {
+      &:first-of-type {
+        margin-right: $spacing-02;
+      }
+    }
+  }
+}

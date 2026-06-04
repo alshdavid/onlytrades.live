@@ -1,0 +1,77 @@
+@use "../../scss/variables.scss" as *;
+@use "../../scss/mixins.scss" as *;
+
+.page.page-bots_deployment_id {
+  > main > div {
+    padding-top: $spacing-08;
+  }
+
+  .list-block {
+    padding: 0 $spacing-04 $spacing-08;
+
+    .panel-header {
+      padding-left: 0;
+      padding-right: 0;
+
+      .btns {
+        .btn {
+          margin-right: $spacing-02;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+
+    label,
+    .label {
+      display: block;
+      margin-bottom: $spacing-04;
+    }
+
+    p,
+    h2,
+    h3 {
+      color: $color-blue-900;
+      margin-bottom: $spacing-02;
+    }
+  }
+
+  textarea {
+    resize: none;
+    height: 200px;
+  }
+
+  .input {
+    min-height: 200px;
+  }
+
+  .logs {
+    .entry {
+      display: flex;
+      padding: $spacing-01;
+      border-bottom: solid 1px $color-grey-300;
+
+      &.stderr {
+        background-color: $color-red-50;
+      }
+
+      time,
+      code {
+        font-family: monospace;
+        display: block;
+      }
+
+      time {
+        width: 250px;
+        flex-shrink: 0;
+      }
+
+      code {
+        width: 100%;
+        flex: 1;
+      }
+    }
+  }
+}

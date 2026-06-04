@@ -1,0 +1,86 @@
+@use "../../scss/variables.scss" as *;
+@use "../../scss/mixins.scss" as *;
+
+.page.page-dashboard {
+  > main > div {
+    padding-top: $spacing-08;
+  }
+
+  .list-block {
+    label,
+    .label {
+      display: block;
+      padding: 0 $spacing-04 $spacing-07 $spacing-04;
+
+      h3 {
+        color: $color-blue-900;
+        margin-bottom: $spacing-03;
+      }
+
+      p {
+        margin-bottom: $spacing-03;
+      }
+
+      input {
+        min-width: 350px;
+        margin-bottom: $spacing-03;
+      }
+    }
+  }
+
+  .account-balance {
+    .btn:first-of-type {
+      margin-right: $spacing-02;
+    }
+  }
+
+  .ctrader-button {
+    margin-bottom: $spacing-04;
+  }
+
+  .ctrader-accounts-table {
+    width: 100%;
+    border: none !important;
+    border-collapse: collapse;
+    // margin-bottom: $spacing-04;
+
+    thead {
+      background-color: $color-blue-50;
+      color: $color-blue-900;
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: $spacing-02 $spacing-04;
+
+      &.wrap {
+        width: 1%;
+        white-space: normal;
+      }
+
+      &.align-right {
+        display: flex;
+        text-align: right;
+        justify-content: flex-end;
+        align-content: center;
+      }
+    }
+
+    tr {
+      // &:nth-child(2n) {
+      // background-color: $color-blue-50;
+
+      // }
+      border-bottom: 1px solid $color-grey-200;
+
+      &:last-of-type {
+        border: none;
+      }
+    }
+
+    .btn {
+      padding: $spacing-01 $spacing-02;
+    }
+  }
+}
