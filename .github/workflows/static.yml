@@ -34,7 +34,7 @@ jobs:
       # Build
       - run: node ./.scripts/build.mts
       - run: cargo build --release -p onlytrades
-      - run: mkdir -p artifacts && cd target/release && tar -czf ../../artifacts/onlytrades_linux_arm64.tar.gz onlytrades 
+      - run: mkdir -p artifacts && cd target/release && tar -czf ../../artifacts/onlytrades_linux_x86_64.tar.gz onlytrades 
 
       - uses: actions/upload-artifact@v7
         with:
@@ -85,5 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: actions/download-artifact@v8
-        with: { path: artifacts }
+        with: 
+          path: artifacts 
+          merge-multiple: true
       - run: ls -l -a artifacts
