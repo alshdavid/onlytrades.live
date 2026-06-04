@@ -1,7 +1,5 @@
 use kit_ctrader_proto::ProtoOaApplicationAuthReq;
 
-use super::OaPayloadType;
-
 /// * Request for the authorizing an application to work with the cTrader platform Proxies.
 #[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct ApplicationAuthReq {

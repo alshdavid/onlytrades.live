@@ -9,10 +9,7 @@ use kit_ctrader_proto::*;
 use prost::Message;
 use tokio::sync::mpsc::unbounded_channel;
 
-use crate::connection::CTraderConnection;
-use crate::connection::CTraderConnectionOptions;
-use crate::connection::PayloadTypeExt;
-use crate::connection::ProtoMessageParse;
+use crate::connection_proto::*;
 
 #[derive(Debug, Clone)]
 pub struct Env {
@@ -44,7 +41,7 @@ async fn should_authenticate() -> anyhow::Result<()> {
   };
 
   // Create a connection
-  let connection = CTraderConnection::connect(CTraderConnectionOptions {
+  let connection = CTraderConnectionRaw::connect(CTraderConnectionRawOptions {
     live: env.ctrader_account_live,
   })
   .await?;

@@ -16,15 +16,10 @@ where
     .block_on(func(ctx))
 }
 
-pub enum CTreaderResponseType {
-  ExecutionEvent(types::ExecutionEvent),
-  SymbolsList(types::SymbolsListRes),
-}
-
 pub struct Context {}
 
 impl Context {
-  pub fn subscribe(&self) -> UnboundedReceiver<CTreaderResponseType> {
+  pub fn subscribe(&self) -> UnboundedReceiver<()> {
     todo!()
   }
 }
