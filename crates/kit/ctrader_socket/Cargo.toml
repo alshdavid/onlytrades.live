@@ -14,7 +14,10 @@ path = "./lib.rs"
 kit_ctrader_proto = { workspace = true }
 
 anyhow = { workspace = true }
+num_enum = { workspace = true }
 prost = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
 thiserror = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
 tokio-native-tls = { workspace = true }
+

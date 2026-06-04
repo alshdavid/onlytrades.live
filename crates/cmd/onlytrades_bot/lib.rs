@@ -1,6 +1,5 @@
-pub use onlytrades_macros::*;
 pub use kit_ctrader::sockets::types;
-
+pub use onlytrades_macros::*;
 use tokio::sync::mpsc::UnboundedReceiver;
 
 pub fn bootstrap<F, Fut, R>(func: F) -> R
@@ -8,7 +7,7 @@ where
   F: 'static + Fn(Context) -> Fut,
   Fut: 'static + Future<Output = R>,
 {
-  let ctx = Context{};
+  let ctx = Context {};
 
   tokio::runtime::Builder::new_current_thread()
     .enable_all()
