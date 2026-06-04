@@ -35,6 +35,9 @@ jobs:
       - run: node ./.scripts/build.mts
       - run: cargo build --release -p onlytrades
       - run: mkdir -p artifacts && cd target/release && tar -czf ../../artifacts/onlytrades_linux_x86_64.tar.gz onlytrades 
+      
+      # Copy client routes manifest
+      - run: cp ./dist/client_manifest.json ./artifacts
 
       - uses: actions/upload-artifact@v7
         with:
