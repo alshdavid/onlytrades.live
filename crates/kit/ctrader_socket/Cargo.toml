@@ -1,0 +1,20 @@
+[package]
+name = "onlytrades_ctrader_socket"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "./lib.rs"
+
+[dependencies]
+kit_ctrader_proto = { workspace = true }
+
+anyhow = { workspace = true }
+prost = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+tokio-native-tls = { workspace = true }

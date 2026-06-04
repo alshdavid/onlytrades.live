@@ -1,5 +1,6 @@
-use super::CTraderSocketClient;
 use kit_ctrader_proto::*;
+
+use super::CTraderSocketClient;
 
 pub struct CTraderSubscribeSpotsOptions {
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

@@ -1,7 +1,7 @@
+use kit_ctrader_proto::*;
 use serde::Serialize;
 
 use super::CTraderSocketClient;
-use kit_ctrader_proto::*;
 use super::types::*;
 
 pub struct CTraderReconcileOptions {

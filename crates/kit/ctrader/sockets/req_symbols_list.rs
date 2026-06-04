@@ -1,7 +1,8 @@
 use std::collections::HashMap;
 
-use super::CTraderSocketClient;
 use kit_ctrader_proto::*;
+
+use super::CTraderSocketClient;
 
 pub struct CTraderSymbolsListOptions {
   pub account_id: i64,

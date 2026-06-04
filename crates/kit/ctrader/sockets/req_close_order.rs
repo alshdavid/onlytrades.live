@@ -1,6 +1,7 @@
+use kit_ctrader_proto::*;
+
 use super::CTraderSocketClient;
 use super::ProtoMessageParse;
-use kit_ctrader_proto::*;
 use super::types::*;
 
 pub struct CTraderClosePositionOptions {
@@ -31,8 +32,7 @@ impl CTraderSocketClient {
         Err(err) => return Err(err.into()),
         Ok(msg) => match msg.payload_type {
           2126 => {
-            let ev =
-              ExecutionEvent::try_from(msg.try_decode_body::<ProtoOaExecutionEvent>()?)?;
+            let ev = ExecutionEvent::try_from(msg.try_decode_body::<ProtoOaExecutionEvent>()?)?;
             match ev.execution_type {
               ExecutionType::OrderFilled => {
                 return Ok(ev);

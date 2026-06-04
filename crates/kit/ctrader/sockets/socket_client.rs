@@ -5,6 +5,11 @@ use std::sync::atomic::Ordering;
 use std::time::Duration;
 
 use dashmap::DashMap;
+use kit_ctrader_proto::ProtoHeartbeatEvent;
+use kit_ctrader_proto::ProtoMessage;
+use kit_ctrader_proto::ProtoOaErrorRes;
+use kit_ctrader_proto::ProtoOaPayloadType;
+use kit_ctrader_proto::ProtoPayloadType;
 use prost::Message;
 use thiserror::Error;
 use tokio::io::AsyncReadExt;
@@ -17,12 +22,6 @@ use tokio::sync::mpsc::UnboundedReceiver;
 use tokio::sync::mpsc::UnboundedSender;
 use tokio_native_tls::TlsConnector;
 use tokio_native_tls::TlsStream;
-
-use kit_ctrader_proto::ProtoHeartbeatEvent;
-use kit_ctrader_proto::ProtoMessage;
-use kit_ctrader_proto::ProtoOaErrorRes;
-use kit_ctrader_proto::ProtoOaPayloadType;
-use kit_ctrader_proto::ProtoPayloadType;
 
 pub const HOST_DEMO: &str = "demo.ctraderapi.com";
 pub const PORT_DEMO: u32 = 5035;

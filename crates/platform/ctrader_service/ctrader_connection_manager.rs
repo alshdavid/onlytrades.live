@@ -98,9 +98,7 @@ impl CTraderConnectionManager {
       .send_and_receive_oneshot::<kit_ctrader_proto::ProtoOaAccountAuthRes>(
         kit_ctrader_proto::ProtoOaPayloadType::ProtoOaAccountAuthReq,
         kit_ctrader_proto::ProtoOaAccountAuthReq {
-          payload_type: Some(
-            kit_ctrader_proto::ProtoOaPayloadType::ProtoOaAccountAuthReq.into(),
-          ),
+          payload_type: Some(kit_ctrader_proto::ProtoOaPayloadType::ProtoOaAccountAuthReq.into()),
           ctid_trader_account_id: *account_id,
           access_token: ctrader_access_token.to_string(),
         },

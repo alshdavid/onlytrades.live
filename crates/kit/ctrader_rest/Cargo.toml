@@ -1,0 +1,17 @@
+[package]
+name = "onlytrades_ctrader_rest"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "./lib.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+chrono = { workspace = true, features = ["serde"] }
+reqwest = { workspace = true, features = ["json"] }
+serde = { workspace = true, features = ["derive"] }
