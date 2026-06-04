@@ -15,7 +15,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v6
-      - run: sudo apt-get update && sudo apt-get install -y git-restore-mtime && git-restore-mtime
 
       # Rust
       - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && echo "$HOME/.cargo/bin" >> $GITHUB_PATH
@@ -48,7 +47,6 @@ jobs:
     runs-on: ubuntu-22.04-arm
     steps:
       - uses: actions/checkout@v6
-      - run: sudo apt-get update && sudo apt-get install -y git-restore-mtime && git-restore-mtime
 
       # Rust
       - run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && echo "$HOME/.cargo/bin" >> $GITHUB_PATH
