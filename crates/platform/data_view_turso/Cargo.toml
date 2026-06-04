@@ -1,0 +1,19 @@
+[package]
+name = "onlytrades_data_view_turso"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "./lib.rs"
+
+[dependencies]
+platform_models = { workspace = true }
+
+anyhow = { workspace = true }
+chrono = { workspace = true, features = ["serde"] }
+libsql = { workspace = true }
+uuid = { workspace = true, features = ["serde", "v4", "v7"] }

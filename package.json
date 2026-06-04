@@ -1,0 +1,26 @@
+{
+  "name": "onlytrades.live",
+  "type": "module",
+  "scripts": {
+    "build": "node .scripts/build.mts && cargo build --release",
+    "build:client": "node .scripts/build.mts",
+    "build:server": "cargo build --release",
+    "fmt": "npx prettier -w ./static/**/*; cargo xfmt",
+    "watch": "cargo watch -c -w \"static\" -w \"server\" -w \".scripts\" -s \"cargo xfmt && node .scripts/build.mts && cargo build && clear && ./target/debug/onlytrades\"",
+    "watch:win": "cargo watch -c -w \"static\" -w \"server\" -w \".scripts\" -s \"cargo xfmt && node .scripts/build.mts && cargo build && cls && .\\target\\debug\\onlytrades.exe\"",
+    "watch:z": "env APP_COMPRESS=true cargo watch -c -s \"cargo xfmt && node .scripts/build.mts && cargo run\"",
+    "watch:server": "cargo watch -s \"cargo run\""
+  },
+  "dependencies": {
+    "@rspack/core": "^2.0.3",
+    "@types/ejs": "^3",
+    "@types/node": "^25",
+    "ejs": "^5",
+    "preact": "^10.29.1",
+    "prettier": "^3",
+    "rxjs": "^7.8.2",
+    "sass": "^1",
+    "typescript": "^6",
+    "yaml": "^2"
+  }
+}

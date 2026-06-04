@@ -1,0 +1,54 @@
+<header class="top-nav">
+  <div class="content content-max-width l">
+    <a href="/" class="title">
+      <img
+        height="32px"
+        width="32px"
+        src="/assets/icons/logo.efdeee9c033df29d5d83.svg"
+        alt="OnlyTrades"
+      />
+      <span>OnlyTrades</span>
+    </a>
+    <nav>
+      <a
+        href="/pricing"
+        class="<%= locals.activePage === 'pricing' ? 'active' : '' %>"
+        >PRICING</a
+      >
+      <a href="/docs" class="<%= locals.activePage === 'docs' ? 'active' : '' %>">DOCS</a>
+      <a href="/#about">ABOUT</a>
+    </nav>
+    <div class="menu" id="top-nav-menu">
+      <a class="btn blue solid" href="/api/auth/login">Sign up</a>
+      <a class="btn blue" href="/api/auth/login">Login</a>
+    </div>
+  </div>
+  <script type="module">
+    (async () => {
+      const CACHE_KEY = "onlytrades:profile";
+
+      const cachedStr = globalThis.localStorage.getItem(CACHE_KEY);
+      let cached = undefined;
+      if (cachedStr) {
+        document.querySelector('#top-nav-menu').innerHTML = `
+          <a class="btn blue solid" href="/dashboard">Dashboard</a>
+          <a class="btn blue" href="/api/auth/logout">Logout</a>
+        `
+        cached = JSON.parse(cachedStr);
+      }
+
+      const response = await fetch("/api/auth/me");
+      if (!response.ok) {
+        globalThis.localStorage.removeItem(CACHE_KEY);
+        document.querySelector('#top-nav-menu').innerHTML = `
+          <a class="btn blue solid" href="/api/auth/login">Sign up</a>
+          <a class="btn blue" href="/api/auth/login">Login</a>
+        `
+        return;
+      }
+
+      const data = await response.json();
+      globalThis.localStorage.setItem(CACHE_KEY, JSON.stringify(data));      
+    })()
+  </script>
+</header>

@@ -1,0 +1,36 @@
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="/assets/icons/logo.efdeee9c033df29d5d83.svg" media="(prefers-color-scheme: light)"/>
+<link rel="icon" href="/assets/icons/logo-dark.0cf3df0c65ac433c32b6.svg" media="(prefers-color-scheme: dark)"/>
+<meta name="theme-color" content="#111111" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<title>OnlyTrades</title>
+<link rel="stylesheet" href="<%= ctx.entries.get(Paths['~/root/static/']('styles.scss')) %>" />
+
+<script>
+  function sanitizeUmamiUrl(type, payload) {
+    if (type === 'pageview') {
+      const uuidRegex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
+      payload.url = payload.url.replace(uuidRegex, ':id');
+    }
+    return payload;
+  }
+</script>
+
+<script 
+  defer 
+  src="https://cloud.umami.is/script.js"
+  data-website-id="6ece7793-7c8b-4f9b-b984-da2e13e5f349"
+  data-domains="onlytrades.live"
+  data-before-send="sanitizeUmamiUrl"></script>
+
+<% if (locals.lazyBundle) { %>
+  <script type="module">
+    document.addEventListener('DOMContentLoaded', (event) => {
+      import("<%= ctx.entries.get(Paths['~/root/static/']('main.ts')) %>")
+    });
+  </script>
+<% } else { %>
+  <script type="module" src="<%= ctx.entries.get(Paths['~/root/static/']('main.ts')) %>" async defer></script>
+<% } %>

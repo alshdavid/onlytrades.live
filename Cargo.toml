@@ -1,0 +1,70 @@
+[workspace]
+resolver = "3"
+members = [
+    "./crates/cmd/*",
+    "./crates/kit/*",
+    "./crates/platform/*",
+]
+
+[workspace.lints.rust]
+elided_lifetimes_in_paths = "allow"
+rust_2018_idioms = { priority = -1, level = "deny" }
+
+[workspace.lints.clippy]
+module_inception = "allow"
+uninlined-format-args = "allow"
+type-complexity = "allow"
+new-without-default = "allow"
+
+[profile.release]
+opt-level = 3
+debug = false
+lto = true
+strip = "debuginfo"
+panic = 'unwind'
+incremental = false
+codegen-units = 1
+rpath = false
+
+[workspace.dependencies]
+kit_auth0 = { package = "onlytrades_auth0", path = "./crates/kit/auth0" }
+kit_b64 = { package = "onlytrades_b64", path = "./crates/kit/b64" }
+kit_compress = { package = "onlytrades_compress", path = "./crates/kit/compress" }
+kit_ctrader = { package = "onlytrades_ctrader", path = "./crates/kit/ctrader" }
+kit_hash = { package = "onlytrades_hash", path = "./crates/kit/hash" }
+kit_std_ext = { package = "onlytrades_std_ext", path = "./crates/kit/std_ext" }
+kit_turso = { package = "onlytrades_turso", path = "./crates/kit/turso" }
+
+platform_bot_service = { package = "onlytrades_bot_service", path = "./crates/platform/bot_service" }
+platform_ctrader_service = { package = "onlytrades_ctrader_service", path = "./crates/platform/ctrader_service" }
+platform_data_view_turso = { package = "onlytrades_data_view_turso", path = "./crates/platform/data_view_turso" }
+platform_log_service = { package = "onlytrades_log_service", path = "./crates/platform/log_service" }
+platform_models = { package = "onlytrades_models", path = "./crates/platform/models" }
+platform_plugins = { package = "onlytrades_plugins", path = "./crates/platform/plugins" }
+platform_process = { package = "onlytrades_process", path = "./crates/platform/process" }
+platform_repository_turso = { package = "onlytrades_repository_turso", path = "./crates/platform/repository_turso" }
+
+anyhow = "1"
+base64 = "0.22"
+brotli = "8"
+chrono = "0.4"
+cookie = "0.18"
+dashmap = "6"
+flate2 = "1"
+include_dir = "0.7"
+jsonwebtoken = "10"
+libsql = "0.9"
+num_enum = "0.7"
+prost = "0.14"
+reqwest = "0.13"
+serde = "1"
+serde_json = "1"
+serde_urlencoded = "0.7"
+sha2 = "0.11"
+sysinfo = "0.39"
+thiserror = "2"
+tokio = "1"
+tokio-native-tls = "0.3"
+uhttp = "0.16"
+url = "2"
+uuid = "1"

@@ -1,0 +1,55 @@
+[package]
+name = "onlytrades"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[[bin]]
+name = "onlytrades"
+path = "./main.rs"
+
+[dependencies]
+kit_auth0 = { workspace = true }
+kit_b64 = { workspace = true }
+kit_compress = { workspace = true }
+kit_ctrader = { workspace = true }
+kit_hash = { workspace = true }
+kit_std_ext = { workspace = true }
+kit_turso = { workspace = true }
+
+platform_bot_service = { workspace = true }
+platform_ctrader_service = { workspace = true }
+platform_data_view_turso = { workspace = true }
+platform_log_service = { workspace = true }
+platform_models = { workspace = true }
+platform_plugins = { workspace = true }
+platform_process = { workspace = true }
+platform_repository_turso = { workspace = true }
+
+anyhow = { workspace = true }
+base64 = { workspace = true }
+brotli = { workspace = true }
+chrono = { workspace = true, features = ["serde"] }
+cookie = { workspace = true, features = ["percent-encode"] }
+dashmap = { workspace = true }
+flate2 = { workspace = true }
+include_dir = { workspace = true }
+jsonwebtoken = { workspace = true, features = ["rust_crypto"] }
+libsql = { workspace = true }
+num_enum = { workspace = true }
+prost = { workspace = true }
+reqwest = { workspace = true, features = ["json"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+serde_urlencoded = { workspace = true }
+sha2 = { workspace = true }
+sysinfo = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+tokio-native-tls = { workspace = true }
+uhttp = { workspace = true, features = ["router","json","anyhow","query","file_server","file_server_include_dir",] }
+url = { workspace = true }
+uuid = { workspace = true, features = ["serde", "v4", "v7"] }

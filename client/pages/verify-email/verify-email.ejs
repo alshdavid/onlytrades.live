@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- await include('../../partials/head.partial.ejs', { lazyBundle: true }) %>
+  </head>
+  <body class="page page-verify-email">
+    <%- await include('../../partials/top-nav.partial.ejs', { activePage: 'docs' }) %>
+    <main>
+      <div>
+        <h1>Email Verification Required</h1>
+        <p>Please check your email to verify</p>
+        <p>Login again once your email has been verified</p>
+        <br>
+        <a href="/api/auth/login" class="btn">Login</a>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>

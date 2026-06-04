@@ -1,0 +1,47 @@
+@use "../../scss/variables.scss" as *;
+@use "../../scss/mixins.scss" as *;
+
+.page.page-triggers_detail_id {
+  > main > div {
+    padding-top: $spacing-08;
+  }
+
+  .list-block {
+    padding: 0 $spacing-04 $spacing-08;
+
+    .panel-header {
+      padding-left: 0;
+      padding-right: 0;
+
+      .btns {
+        .btn {
+          &:first-of-type {
+            margin-right: $spacing-02;
+          }
+        }
+      }
+    }
+
+    label,
+    .label {
+      display: block;
+      margin-bottom: $spacing-04;
+    }
+
+    p,
+    h2,
+    h3 {
+      color: $color-blue-900;
+      margin-bottom: $spacing-02;
+    }
+  }
+
+  textarea {
+    resize: none;
+    height: 200px;
+  }
+
+  .input {
+    min-height: 200px;
+  }
+}

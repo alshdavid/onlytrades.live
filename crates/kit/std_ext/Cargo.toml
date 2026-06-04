@@ -1,0 +1,13 @@
+[package]
+name = "onlytrades_std_ext"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "./lib.rs"
+
+[dependencies]

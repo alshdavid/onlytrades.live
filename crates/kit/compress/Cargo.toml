@@ -1,0 +1,15 @@
+[package]
+name = "onlytrades_compress"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[lib]
+path = "./lib.rs"
+
+[dependencies]
+brotli = { workspace = true }
+flate2 = { workspace = true }

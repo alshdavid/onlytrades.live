@@ -1,0 +1,193 @@
+@use "./scss/variables.scss" as *;
+@use "./scss/mixins.scss" as *;
+
+@use "./scss/btn.scss";
+
+@use "./partials/top-nav.partial.scss";
+
+@use "./components/spinner/spinner.scss";
+@use "./components/navbar/navbar.scss";
+@use "./components/textarea/textarea.scss";
+
+@use "./pages/verify-email/verify-email.scss";
+@use "./pages/home/home.scss";
+@use "./pages/dashboard/dashboard.scss";
+@use "./pages/bots/bots.scss";
+@use "./pages/bots_new/bots_new.scss";
+@use "./pages/bots_detail_id/bots_detail_id.scss";
+@use "./pages/bots_deploy_id/bots_deploy_id.scss";
+@use "./pages/bots_deployment_id/bots_deployment_id.scss";
+@use "./pages/marketplace/marketplace.scss";
+@use "./pages/triggers/triggers.scss";
+@use "./pages/triggers_new/triggers_new.scss";
+@use "./pages/triggers_detail_id/triggers_detail_id.scss";
+
+* {
+  font-family: $font-family-0;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  box-sizing: border-box;
+  text-rendering: optimizeLegibility;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+.content-max-width {
+  padding: 0 3%;
+}
+
+@media (min-width: 700px) {
+  .content-max-width {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0;
+
+    &.l {
+      max-width: 1100px;
+    }
+  }
+}
+
+/*
+  Josh's Custom CSS Reset
+  https://www.joshwcomeau.com/css/custom-css-reset/
+*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+*:not(dialog) {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+
+p {
+  text-wrap: pretty;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+
+ul {
+  margin-left: 24px;
+}
+
+#root,
+#__next {
+  isolation: isolate;
+}
+
+body.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  main {
+    flex: 1;
+  }
+
+  footer {
+    border-top: $color-blue-200 1px solid;
+    background-color: $color-blue-50;
+    padding: $spacing-12;
+  }
+}
+
+body.page {
+  main.loading {
+    display: flex;
+    justify-content: center;
+    padding-top: $spacing-15;
+  }
+}
+
+.content-panel {
+  border: 1px $color-blue-200 solid;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: $spacing-08;
+
+  .panel-header {
+    padding: $spacing-07 $spacing-04;
+    display: flex;
+    justify-content: space-between;
+
+    h2 {
+      color: $color-blue-900;
+    }
+  }
+}
+
+.input,
+input[type="text"],
+select,
+textarea {
+  display: block;
+  border: 1px solid $color-grey-300;
+  border-radius: 8px;
+  padding: $spacing-02 $spacing-03;
+  width: 100%;
+
+  // &:invalid {
+  //   border: 1px solid $color-red-300;
+  // }
+}
+
+.ctrader-button {
+  border: 1px solid $color-grey-300;
+  border-radius: 4px;
+  padding: $spacing-02 $spacing-04;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 20px;
+    margin-right: $spacing-02;
+  }
+}

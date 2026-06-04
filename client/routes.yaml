@@ -1,0 +1,60 @@
+- path: "/"
+  target: "./pages/home/home.ejs"
+  dest: "./index.html"
+
+- path: "/docs"
+  target: "./pages/docs/docs.ejs"
+  dest: "./docs.html"
+
+- path: "/pricing"
+  target: "./pages/pricing/pricing.ejs"
+  dest: "./pricing.html"
+
+- path: "/verify-email"
+  target: "./pages/verify-email/verify-email.ejs"
+  dest: "./verify-email.html"
+
+- path: "/dashboard"
+  target: "./pages/dashboard/dashboard.ejs"
+  dest: "./dashboard.html"
+
+- path: "/marketplace"
+  target: "./pages/marketplace/marketplace.ejs"
+  dest: "./marketplace.html"
+
+- path: "/bots"
+  target: "./pages/bots/bots.ejs"
+  dest: "./bots.html"
+
+- path: "/bots/new"
+  target: "./pages/bots_new/bots_new.ejs"
+  dest: "./bots_new.html"
+
+- path: "/bots/detail/:id"
+  target: "./pages/bots_detail_id/bots_detail_id.ejs"
+  dest: "./bots_detail_id.html"
+
+- path: "/bots/deploy/:id"
+  target: "./pages/bots_deploy_id/bots_deploy_id.ejs"
+  dest: "./bots_deploy_id.html"
+
+- path: "/bots/deployment/:id"
+  target: "./pages/bots_deployment_id/bots_deployment_id.ejs"
+  dest: "./bots_deployment_id.html"
+
+- path: "/triggers"
+  target: "./pages/triggers/triggers.ejs"
+  dest: "./triggers.html"
+
+- path: "/triggers/new"
+  target: "./pages/triggers_new/triggers_new.ejs"
+  dest: "./triggers_new.html"
+
+- path: "/triggers/detail/:id"
+  target: "./pages/triggers_detail_id/triggers_detail_id.ejs"
+  dest: "./triggers_detail_id.html"
+
+# Admin Stuff
+- path: "/admin"
+  target: "./pages/admin/admin.ejs"
+  dest: "./admin.html"
