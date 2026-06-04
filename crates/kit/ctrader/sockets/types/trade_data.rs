@@ -25,10 +25,10 @@ pub struct TradeData {
   pub close_timestamp: Option<u64>,
 }
 
-impl TryFrom<super::super::messages::ProtoOaTradeData> for TradeData {
+impl TryFrom<kit_ctrader_proto::ProtoOaTradeData> for TradeData {
   type Error = anyhow::Error;
 
-  fn try_from(trade_data: super::super::messages::ProtoOaTradeData) -> Result<Self, Self::Error> {
+  fn try_from(trade_data: kit_ctrader_proto::ProtoOaTradeData) -> Result<Self, Self::Error> {
     Ok(TradeData {
       symbol_id: trade_data.symbol_id,
       volume: trade_data.volume,

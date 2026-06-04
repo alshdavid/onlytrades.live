@@ -47,8 +47,8 @@ pub struct Trader {
   pub stop_out_strategy: Option<i32>,
 }
 
-impl From<super::super::messages::ProtoOaTrader> for Trader {
-  fn from(trader: super::super::messages::ProtoOaTrader) -> Self {
+impl From<kit_ctrader_proto::ProtoOaTrader> for Trader {
+  fn from(trader: kit_ctrader_proto::ProtoOaTrader) -> Self {
     Trader {
       ctid_trader_account_id: trader.ctid_trader_account_id,
       balance: trader.balance,

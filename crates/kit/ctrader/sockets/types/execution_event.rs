@@ -25,11 +25,11 @@ pub struct ExecutionEvent {
   pub is_server_event: Option<bool>,
 }
 
-impl TryFrom<super::super::messages::ProtoOaExecutionEvent> for ExecutionEvent {
+impl TryFrom<kit_ctrader_proto::ProtoOaExecutionEvent> for ExecutionEvent {
   type Error = anyhow::Error;
 
   fn try_from(
-    execution_event: super::super::messages::ProtoOaExecutionEvent
+    execution_event: kit_ctrader_proto::ProtoOaExecutionEvent
   ) -> Result<Self, Self::Error> {
     Ok(ExecutionEvent {
       ctid_trader_account_id: execution_event.ctid_trader_account_id,

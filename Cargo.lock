@@ -2195,6 +2195,23 @@ dependencies = [
  "chrono",
  "dashmap",
  "num_enum",
+ "onlytrades_ctrader_proto",
+ "prost 0.14.3",
+ "reqwest",
+ "serde",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-native-tls",
+]
+
+[[package]]
+name = "onlytrades_ctrader_proto"
+version = "0.0.0-local"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "dashmap",
+ "num_enum",
  "prost 0.14.3",
  "reqwest",
  "serde",
@@ -2210,6 +2227,7 @@ dependencies = [
  "anyhow",
  "chrono",
  "onlytrades_ctrader",
+ "onlytrades_ctrader_proto",
  "onlytrades_models",
  "onlytrades_repository_turso",
  "tokio",
@@ -2261,6 +2279,7 @@ version = "0.0.0-local"
 dependencies = [
  "anyhow",
  "onlytrades_ctrader",
+ "onlytrades_ctrader_proto",
  "onlytrades_ctrader_service",
  "onlytrades_process",
  "serde",

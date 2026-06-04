@@ -18,11 +18,11 @@ use tokio::sync::mpsc::UnboundedSender;
 use tokio_native_tls::TlsConnector;
 use tokio_native_tls::TlsStream;
 
-use super::messages::ProtoHeartbeatEvent;
-use super::messages::ProtoMessage;
-use super::messages::ProtoOaErrorRes;
-use super::messages::ProtoOaPayloadType;
-use super::messages::ProtoPayloadType;
+use kit_ctrader_proto::ProtoHeartbeatEvent;
+use kit_ctrader_proto::ProtoMessage;
+use kit_ctrader_proto::ProtoOaErrorRes;
+use kit_ctrader_proto::ProtoOaPayloadType;
+use kit_ctrader_proto::ProtoPayloadType;
 
 pub const HOST_DEMO: &str = "demo.ctraderapi.com";
 pub const PORT_DEMO: u32 = 5035;

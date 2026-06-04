@@ -9,8 +9,8 @@ pub struct Interval {
   pub end_second: u32,
 }
 
-impl From<super::super::messages::ProtoOaInterval> for Interval {
-  fn from(interval: super::super::messages::ProtoOaInterval) -> Self {
+impl From<kit_ctrader_proto::ProtoOaInterval> for Interval {
+  fn from(interval: kit_ctrader_proto::ProtoOaInterval) -> Self {
     Interval {
       start_second: interval.start_second,
       end_second: interval.end_second,

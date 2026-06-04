@@ -82,11 +82,11 @@ impl CTraderConnectionManager {
     let conn = Arc::new(CTraderSocketClient::connect(con_options).await?);
 
     conn
-      .send_and_receive_oneshot::<kit_ctrader::messages::ProtoOaApplicationAuthRes>(
-        kit_ctrader::messages::ProtoOaPayloadType::ProtoOaApplicationAuthReq,
-        kit_ctrader::messages::ProtoOaApplicationAuthReq {
+      .send_and_receive_oneshot::<kit_ctrader_proto::ProtoOaApplicationAuthRes>(
+        kit_ctrader_proto::ProtoOaPayloadType::ProtoOaApplicationAuthReq,
+        kit_ctrader_proto::ProtoOaApplicationAuthReq {
           payload_type: Some(
-            kit_ctrader::messages::ProtoOaPayloadType::ProtoOaApplicationAuthReq.into(),
+            kit_ctrader_proto::ProtoOaPayloadType::ProtoOaApplicationAuthReq.into(),
           ),
           client_id: self.ctrader_client_id.clone(),
           client_secret: self.ctrader_client_secret.clone(),
@@ -95,11 +95,11 @@ impl CTraderConnectionManager {
       .await?;
 
     conn
-      .send_and_receive_oneshot::<kit_ctrader::messages::ProtoOaAccountAuthRes>(
-        kit_ctrader::messages::ProtoOaPayloadType::ProtoOaAccountAuthReq,
-        kit_ctrader::messages::ProtoOaAccountAuthReq {
+      .send_and_receive_oneshot::<kit_ctrader_proto::ProtoOaAccountAuthRes>(
+        kit_ctrader_proto::ProtoOaPayloadType::ProtoOaAccountAuthReq,
+        kit_ctrader_proto::ProtoOaAccountAuthReq {
           payload_type: Some(
-            kit_ctrader::messages::ProtoOaPayloadType::ProtoOaAccountAuthReq.into(),
+            kit_ctrader_proto::ProtoOaPayloadType::ProtoOaAccountAuthReq.into(),
           ),
           ctid_trader_account_id: *account_id,
           access_token: ctrader_access_token.to_string(),

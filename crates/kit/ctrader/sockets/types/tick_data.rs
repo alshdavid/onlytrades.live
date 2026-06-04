@@ -9,8 +9,8 @@ pub struct TickData {
   pub tick: i64,
 }
 
-impl From<super::super::messages::ProtoOaTickData> for TickData {
-  fn from(tick_data: super::super::messages::ProtoOaTickData) -> Self {
+impl From<kit_ctrader_proto::ProtoOaTickData> for TickData {
+  fn from(tick_data: kit_ctrader_proto::ProtoOaTickData) -> Self {
     TickData {
       timestamp: tick_data.timestamp,
       tick: tick_data.tick,

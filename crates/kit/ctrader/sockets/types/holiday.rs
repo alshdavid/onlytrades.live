@@ -21,8 +21,8 @@ pub struct Holiday {
   pub end_second: Option<i32>,
 }
 
-impl From<super::super::messages::ProtoOaHoliday> for Holiday {
-  fn from(holiday: super::super::messages::ProtoOaHoliday) -> Self {
+impl From<kit_ctrader_proto::ProtoOaHoliday> for Holiday {
+  fn from(holiday: kit_ctrader_proto::ProtoOaHoliday) -> Self {
     Holiday {
       holiday_id: holiday.holiday_id,
       name: holiday.name,

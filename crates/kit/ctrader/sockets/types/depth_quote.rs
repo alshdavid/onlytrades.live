@@ -13,8 +13,8 @@ pub struct DepthQuote {
   pub ask: Option<u64>,
 }
 
-impl From<super::super::messages::ProtoOaDepthQuote> for DepthQuote {
-  fn from(quote: super::super::messages::ProtoOaDepthQuote) -> Self {
+impl From<kit_ctrader_proto::ProtoOaDepthQuote> for DepthQuote {
+  fn from(quote: kit_ctrader_proto::ProtoOaDepthQuote) -> Self {
     DepthQuote {
       id: quote.id,
       size: quote.size,

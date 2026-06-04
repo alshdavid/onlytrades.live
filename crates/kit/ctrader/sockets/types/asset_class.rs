@@ -11,8 +11,8 @@ pub struct AssetClass {
   pub sorting_number: Option<f64>,
 }
 
-impl From<super::super::messages::ProtoOaAssetClass> for AssetClass {
-  fn from(asset_class: super::super::messages::ProtoOaAssetClass) -> Self {
+impl From<kit_ctrader_proto::ProtoOaAssetClass> for AssetClass {
+  fn from(asset_class: kit_ctrader_proto::ProtoOaAssetClass) -> Self {
     AssetClass {
       id: asset_class.id,
       name: asset_class.name,

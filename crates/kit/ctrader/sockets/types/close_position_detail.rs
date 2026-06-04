@@ -25,8 +25,8 @@ pub struct ClosePositionDetail {
   pub pnl_conversion_fee: Option<i64>,
 }
 
-impl From<super::super::messages::ProtoOaClosePositionDetail> for ClosePositionDetail {
-  fn from(close_position_detail: super::super::messages::ProtoOaClosePositionDetail) -> Self {
+impl From<kit_ctrader_proto::ProtoOaClosePositionDetail> for ClosePositionDetail {
+  fn from(close_position_detail: kit_ctrader_proto::ProtoOaClosePositionDetail) -> Self {
     ClosePositionDetail {
       entry_price: close_position_detail.entry_price,
       gross_profit: close_position_detail.gross_profit,

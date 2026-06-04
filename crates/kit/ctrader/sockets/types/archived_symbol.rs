@@ -13,8 +13,8 @@ pub struct ArchivedSymbol {
   pub description: Option<String>,
 }
 
-impl From<super::super::messages::ProtoOaArchivedSymbol> for ArchivedSymbol {
-  fn from(symbol: super::super::messages::ProtoOaArchivedSymbol) -> Self {
+impl From<kit_ctrader_proto::ProtoOaArchivedSymbol> for ArchivedSymbol {
+  fn from(symbol: kit_ctrader_proto::ProtoOaArchivedSymbol) -> Self {
     ArchivedSymbol {
       symbol_id: symbol.symbol_id,
       name: symbol.name,

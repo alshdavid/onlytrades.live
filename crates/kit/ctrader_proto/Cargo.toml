@@ -1,5 +1,5 @@
 [package]
-name = "onlytrades_ctrader"
+name = "onlytrades_ctrader_proto"
 version = "0.0.0-local"
 authors = ["David Alsh"]
 repository = "https://github.com/alshdavid/onlytrades.live"
@@ -11,8 +11,6 @@ license = "MIT"
 path = "./lib.rs"
 
 [dependencies]
-kit_ctrader_proto = { workspace = true }
-
 anyhow = { workspace = true }
 chrono = { workspace = true, features = ["serde"] }
 dashmap = { workspace = true }

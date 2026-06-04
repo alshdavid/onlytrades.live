@@ -1,4 +1,3 @@
-pub mod messages;
 mod req_close_order;
 mod req_new_order;
 mod req_reconcile;

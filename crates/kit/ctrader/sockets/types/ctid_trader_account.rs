@@ -17,8 +17,8 @@ pub struct CtidTraderAccount {
   pub broker_title_short: Option<String>,
 }
 
-impl From<super::super::messages::ProtoOaCtidTraderAccount> for CtidTraderAccount {
-  fn from(account: super::super::messages::ProtoOaCtidTraderAccount) -> Self {
+impl From<kit_ctrader_proto::ProtoOaCtidTraderAccount> for CtidTraderAccount {
+  fn from(account: kit_ctrader_proto::ProtoOaCtidTraderAccount) -> Self {
     CtidTraderAccount {
       ctid_trader_account_id: account.ctid_trader_account_id,
       is_live: account.is_live,

@@ -21,10 +21,10 @@ pub struct SpotEvent {
   pub timestamp: Option<i64>,
 }
 
-impl TryFrom<super::super::messages::ProtoOaSpotEvent> for SpotEvent {
+impl TryFrom<kit_ctrader_proto::ProtoOaSpotEvent> for SpotEvent {
   type Error = anyhow::Error;
 
-  fn try_from(value: super::super::messages::ProtoOaSpotEvent) -> Result<Self, Self::Error> {
+  fn try_from(value: kit_ctrader_proto::ProtoOaSpotEvent) -> Result<Self, Self::Error> {
     Ok(SpotEvent {
       ctid_trader_account_id: value.ctid_trader_account_id,
       symbol_id: value.symbol_id,

@@ -11,8 +11,8 @@ pub struct MarginCall {
   pub utc_last_update_timestamp: Option<i64>,
 }
 
-impl From<super::super::messages::ProtoOaMarginCall> for MarginCall {
-  fn from(margin_call: super::super::messages::ProtoOaMarginCall) -> Self {
+impl From<kit_ctrader_proto::ProtoOaMarginCall> for MarginCall {
+  fn from(margin_call: kit_ctrader_proto::ProtoOaMarginCall) -> Self {
     MarginCall {
       margin_call_type: margin_call.margin_call_type,
       margin_level_threshold: margin_call.margin_level_threshold,

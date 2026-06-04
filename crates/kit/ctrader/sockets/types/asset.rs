@@ -13,8 +13,8 @@ pub struct Asset {
   pub digits: Option<i32>,
 }
 
-impl From<super::super::messages::ProtoOaAsset> for Asset {
-  fn from(asset: super::super::messages::ProtoOaAsset) -> Self {
+impl From<kit_ctrader_proto::ProtoOaAsset> for Asset {
+  fn from(asset: kit_ctrader_proto::ProtoOaAsset) -> Self {
     Asset {
       asset_id: asset.asset_id,
       name: asset.name,

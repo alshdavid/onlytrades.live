@@ -13,8 +13,8 @@ pub struct DealOffset {
   pub execution_price: Option<f64>,
 }
 
-impl From<super::super::messages::ProtoOaDealOffset> for DealOffset {
-  fn from(deal_offset: super::super::messages::ProtoOaDealOffset) -> Self {
+impl From<kit_ctrader_proto::ProtoOaDealOffset> for DealOffset {
+  fn from(deal_offset: kit_ctrader_proto::ProtoOaDealOffset) -> Self {
     DealOffset {
       deal_id: deal_offset.deal_id,
       volume: deal_offset.volume,

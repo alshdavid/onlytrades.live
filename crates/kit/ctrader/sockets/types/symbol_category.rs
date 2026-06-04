@@ -13,8 +13,8 @@ pub struct SymbolCategory {
   pub sorting_number: Option<f64>,
 }
 
-impl From<super::super::messages::ProtoOaSymbolCategory> for SymbolCategory {
-  fn from(category: super::super::messages::ProtoOaSymbolCategory) -> Self {
+impl From<kit_ctrader_proto::ProtoOaSymbolCategory> for SymbolCategory {
+  fn from(category: kit_ctrader_proto::ProtoOaSymbolCategory) -> Self {
     SymbolCategory {
       id: category.id,
       asset_class_id: category.asset_class_id,

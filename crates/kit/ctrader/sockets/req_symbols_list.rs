@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use super::CTraderSocketClient;
-use super::messages;
+use kit_ctrader_proto::*;
 
 pub struct CTraderSymbolsListOptions {
   pub account_id: i64,
@@ -13,9 +13,9 @@ impl CTraderSocketClient {
     options: CTraderSymbolsListOptions,
   ) -> anyhow::Result<HashMap<String, i64>> {
     let result = self
-      .send_and_receive_oneshot::<messages::ProtoOaSymbolsListRes>(
-        messages::ProtoOaPayloadType::ProtoOaSymbolsListReq,
-        messages::ProtoOaSymbolsListReq {
+      .send_and_receive_oneshot::<ProtoOaSymbolsListRes>(
+        ProtoOaPayloadType::ProtoOaSymbolsListReq,
+        ProtoOaSymbolsListReq {
           payload_type: None,
           ctid_trader_account_id: options.account_id,
           include_archived_symbols: None,

@@ -19,8 +19,8 @@ pub struct Trendbar {
   pub utc_timestamp_in_minutes: Option<u32>,
 }
 
-impl From<super::super::messages::ProtoOaTrendbar> for Trendbar {
-  fn from(value: super::super::messages::ProtoOaTrendbar) -> Self {
+impl From<kit_ctrader_proto::ProtoOaTrendbar> for Trendbar {
+  fn from(value: kit_ctrader_proto::ProtoOaTrendbar) -> Self {
     Trendbar {
       volume: value.volume,
       period: value.period,

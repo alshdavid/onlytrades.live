@@ -20,8 +20,8 @@ pub struct LightSymbol {
   pub sorting_number: Option<f64>,
 }
 
-impl From<super::super::messages::ProtoOaLightSymbol> for LightSymbol {
-  fn from(symbol: super::super::messages::ProtoOaLightSymbol) -> Self {
+impl From<kit_ctrader_proto::ProtoOaLightSymbol> for LightSymbol {
+  fn from(symbol: kit_ctrader_proto::ProtoOaLightSymbol) -> Self {
     LightSymbol {
       symbol_id: symbol.symbol_id,
       symbol_name: symbol.symbol_name,

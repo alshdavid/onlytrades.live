@@ -3,7 +3,7 @@ use std::sync::Arc;
 use kit_ctrader::CTraderSubscribeSpotsOptions;
 use kit_ctrader::ProtoMessageParse;
 use kit_ctrader::SpotEvent;
-use kit_ctrader::messages;
+use kit_ctrader_proto::{self};
 use platform_ctrader_service::CTraderService;
 use platform_process::DenoIPCMessage;
 use platform_process::DenoInstance;
@@ -69,7 +69,7 @@ impl DenoPlugin {
 
         while let Some(Ok(msg)) = sub.recv().await {
           if msg.payload_type == 2131 {
-            let payload = msg.try_decode_body::<messages::ProtoOaSpotEvent>()?;
+            let payload = msg.try_decode_body::<kit_ctrader_proto::ProtoOaSpotEvent>()?;
             let payload = SpotEvent::try_from(payload)?;
             let response = serde_json::to_value(&payload)?;
             let msg = DenoIPCMessage("spot_event".to_string(), Some(response), None);

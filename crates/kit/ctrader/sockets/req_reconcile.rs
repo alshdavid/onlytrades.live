@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 use super::CTraderSocketClient;
-use super::messages;
+use kit_ctrader_proto::*;
 use super::types::*;
 
 pub struct CTraderReconcileOptions {
@@ -22,9 +22,9 @@ impl CTraderSocketClient {
     options: CTraderReconcileOptions,
   ) -> anyhow::Result<CTraderReconcileResult> {
     let res = self
-      .send_and_receive_oneshot::<messages::ProtoOaReconcileRes>(
-        messages::ProtoOaPayloadType::ProtoOaReconcileReq,
-        messages::ProtoOaReconcileReq {
+      .send_and_receive_oneshot::<ProtoOaReconcileRes>(
+        ProtoOaPayloadType::ProtoOaReconcileReq,
+        ProtoOaReconcileReq {
           payload_type: None,
           ctid_trader_account_id: options.account_id,
           return_protection_orders: None,

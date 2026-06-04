@@ -11,8 +11,8 @@ pub struct DynamicLeverage {
   pub tiers: Vec<DynamicLeverageTier>,
 }
 
-impl From<super::super::messages::ProtoOaDynamicLeverage> for DynamicLeverage {
-  fn from(leverage: super::super::messages::ProtoOaDynamicLeverage) -> Self {
+impl From<kit_ctrader_proto::ProtoOaDynamicLeverage> for DynamicLeverage {
+  fn from(leverage: kit_ctrader_proto::ProtoOaDynamicLeverage) -> Self {
     DynamicLeverage {
       leverage_id: leverage.leverage_id,
       tiers: leverage

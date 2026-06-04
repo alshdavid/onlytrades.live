@@ -1,6 +1,6 @@
 use super::CTraderSocketClient;
 use super::ProtoMessageParse;
-use super::messages;
+use kit_ctrader_proto::*;
 use super::types::*;
 
 pub struct CTraderNewOrderOptions {
@@ -56,8 +56,8 @@ impl CTraderSocketClient {
   ) -> anyhow::Result<ExecutionEvent> {
     let mut rx = self
       .send_and_subscribe(
-        messages::ProtoOaPayloadType::ProtoOaNewOrderReq,
-        messages::ProtoOaNewOrderReq {
+        ProtoOaPayloadType::ProtoOaNewOrderReq,
+        ProtoOaNewOrderReq {
           payload_type: None,
           ctid_trader_account_id: options.ctid_trader_account_id,
           symbol_id: options.symbol_id,
@@ -91,7 +91,7 @@ impl CTraderSocketClient {
         Ok(msg) => match msg.payload_type {
           2126 => {
             let ev =
-              ExecutionEvent::try_from(msg.try_decode_body::<messages::ProtoOaExecutionEvent>()?)?;
+              ExecutionEvent::try_from(msg.try_decode_body::<ProtoOaExecutionEvent>()?)?;
             match ev.execution_type {
               ExecutionType::OrderFilled => {
                 return Ok(ev);

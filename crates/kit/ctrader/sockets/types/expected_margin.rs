@@ -11,8 +11,8 @@ pub struct ExpectedMargin {
   pub sell_margin: i64,
 }
 
-impl From<super::super::messages::ProtoOaExpectedMargin> for ExpectedMargin {
-  fn from(margin: super::super::messages::ProtoOaExpectedMargin) -> Self {
+impl From<kit_ctrader_proto::ProtoOaExpectedMargin> for ExpectedMargin {
+  fn from(margin: kit_ctrader_proto::ProtoOaExpectedMargin) -> Self {
     ExpectedMargin {
       volume: margin.volume,
       buy_margin: margin.buy_margin,

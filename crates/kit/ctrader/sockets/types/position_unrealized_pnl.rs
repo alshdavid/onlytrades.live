@@ -11,8 +11,8 @@ pub struct PositionUnrealizedPnL {
   pub net_unrealized_pn_l: i64,
 }
 
-impl From<super::super::messages::ProtoOaPositionUnrealizedPnL> for PositionUnrealizedPnL {
-  fn from(pnl: super::super::messages::ProtoOaPositionUnrealizedPnL) -> Self {
+impl From<kit_ctrader_proto::ProtoOaPositionUnrealizedPnL> for PositionUnrealizedPnL {
+  fn from(pnl: kit_ctrader_proto::ProtoOaPositionUnrealizedPnL) -> Self {
     PositionUnrealizedPnL {
       position_id: pnl.position_id,
       gross_unrealized_pn_l: pnl.gross_unrealized_pn_l,

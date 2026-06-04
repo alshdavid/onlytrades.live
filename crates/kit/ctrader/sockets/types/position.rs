@@ -39,10 +39,10 @@ pub struct Position {
   pub trailing_stop_loss: Option<bool>,
 }
 
-impl TryFrom<super::super::messages::ProtoOaPosition> for Position {
+impl TryFrom<kit_ctrader_proto::ProtoOaPosition> for Position {
   type Error = anyhow::Error;
 
-  fn try_from(position: super::super::messages::ProtoOaPosition) -> Result<Self, Self::Error> {
+  fn try_from(position: kit_ctrader_proto::ProtoOaPosition) -> Result<Self, Self::Error> {
     Ok(Position {
       position_id: position.position_id,
       trade_data: TradeData::try_from(position.trade_data)?,

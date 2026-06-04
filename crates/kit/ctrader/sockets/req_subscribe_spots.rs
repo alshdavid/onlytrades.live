@@ -1,5 +1,5 @@
 use super::CTraderSocketClient;
-use super::messages;
+use kit_ctrader_proto::*;
 
 pub struct CTraderSubscribeSpotsOptions {
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
@@ -17,8 +17,8 @@ impl CTraderSocketClient {
   ) -> anyhow::Result<()> {
     let mut _rx = self
       .send_and_subscribe(
-        messages::ProtoOaPayloadType::ProtoOaSubscribeSpotsReq,
-        messages::ProtoOaSubscribeSpotsReq {
+        ProtoOaPayloadType::ProtoOaSubscribeSpotsReq,
+        ProtoOaSubscribeSpotsReq {
           payload_type: None,
           ctid_trader_account_id: options.account_id,
           symbol_id: options.symbol_id,

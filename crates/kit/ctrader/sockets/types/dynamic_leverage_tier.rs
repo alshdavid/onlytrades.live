@@ -9,8 +9,8 @@ pub struct DynamicLeverageTier {
   pub leverage: i32,
 }
 
-impl From<super::super::messages::ProtoOaDynamicLeverageTier> for DynamicLeverageTier {
-  fn from(tier: super::super::messages::ProtoOaDynamicLeverageTier) -> Self {
+impl From<kit_ctrader_proto::ProtoOaDynamicLeverageTier> for DynamicLeverageTier {
+  fn from(tier: kit_ctrader_proto::ProtoOaDynamicLeverageTier) -> Self {
     DynamicLeverageTier {
       volume: tier.volume,
       leverage: tier.leverage,

@@ -41,10 +41,10 @@ pub struct Deal {
   pub money_digits: Option<u32>,
 }
 
-impl TryFrom<super::super::messages::ProtoOaDeal> for Deal {
+impl TryFrom<kit_ctrader_proto::ProtoOaDeal> for Deal {
   type Error = anyhow::Error;
 
-  fn try_from(deal: super::super::messages::ProtoOaDeal) -> Result<Self, Self::Error> {
+  fn try_from(deal: kit_ctrader_proto::ProtoOaDeal) -> Result<Self, Self::Error> {
     Ok(Deal {
       deal_id: deal.deal_id,
       order_id: deal.order_id,

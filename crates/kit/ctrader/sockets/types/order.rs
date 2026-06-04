@@ -53,10 +53,10 @@ pub struct Order {
   pub stop_trigger_method: Option<TriggerMethod>,
 }
 
-impl TryFrom<super::super::messages::ProtoOaOrder> for Order {
+impl TryFrom<kit_ctrader_proto::ProtoOaOrder> for Order {
   type Error = anyhow::Error;
 
-  fn try_from(order: super::super::messages::ProtoOaOrder) -> Result<Self, Self::Error> {
+  fn try_from(order: kit_ctrader_proto::ProtoOaOrder) -> Result<Self, Self::Error> {
     Ok(Order {
       order_id: order.order_id,
       trade_data: TradeData {

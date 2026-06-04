@@ -83,10 +83,10 @@ pub struct Symbol {
   pub measurement_units: Option<String>,
 }
 
-impl TryFrom<super::super::messages::ProtoOaSymbol> for Symbol {
+impl TryFrom<kit_ctrader_proto::ProtoOaSymbol> for Symbol {
   type Error = anyhow::Error;
 
-  fn try_from(symbol: super::super::messages::ProtoOaSymbol) -> Result<Self, Self::Error> {
+  fn try_from(symbol: kit_ctrader_proto::ProtoOaSymbol) -> Result<Self, Self::Error> {
     Ok(Symbol {
       symbol_id: symbol.symbol_id,
       digits: symbol.digits,

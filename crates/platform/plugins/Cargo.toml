@@ -12,6 +12,7 @@ path = "./lib.rs"
 
 [dependencies]
 kit_ctrader = { workspace = true }
+kit_ctrader_proto = { workspace = true }
 platform_ctrader_service = { workspace = true }
 platform_process = { workspace = true }
 

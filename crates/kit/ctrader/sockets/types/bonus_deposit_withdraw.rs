@@ -27,11 +27,11 @@ pub struct BonusDepositWithdraw {
   pub money_digits: Option<u32>,
 }
 
-impl TryFrom<super::super::messages::ProtoOaBonusDepositWithdraw> for BonusDepositWithdraw {
+impl TryFrom<kit_ctrader_proto::ProtoOaBonusDepositWithdraw> for BonusDepositWithdraw {
   type Error = anyhow::Error;
 
   fn try_from(
-    bonus_deposit_withdraw: super::super::messages::ProtoOaBonusDepositWithdraw
+    bonus_deposit_withdraw: kit_ctrader_proto::ProtoOaBonusDepositWithdraw
   ) -> Result<Self, Self::Error> {
     Ok(BonusDepositWithdraw {
       operation_type: ChangeBonusType::try_from(bonus_deposit_withdraw.operation_type)?,
