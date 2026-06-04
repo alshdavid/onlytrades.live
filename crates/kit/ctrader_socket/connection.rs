@@ -1,6 +1,8 @@
+use kit_ctrader_proto::ProtoMessage;
 use tokio::sync::mpsc::UnboundedReceiver;
 use tokio::sync::mpsc::unbounded_channel;
 
+use crate::CTraderRequestType;
 use crate::CTraderResponseType;
 use crate::connection_proto::CTraderConnectionRaw;
 use crate::connection_proto::CTraderConnectionRawOptions;
@@ -34,5 +36,12 @@ impl CTraderConnection {
     });
 
     rx
+  }
+
+  pub async fn send(
+    &self,
+    message: CTraderRequestType,
+  ) -> std::result::Result<(), ProtoError> {
+    self.conn.send(Into::<ProtoMessage>::into(message)).await
   }
 }

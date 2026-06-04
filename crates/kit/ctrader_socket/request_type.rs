@@ -1,305 +1,581 @@
+use kit_ctrader_proto::ProtoMessage;
 use kit_ctrader_proto::{self as ct};
+use prost::Message;
 
 use super::types;
-use crate::connection_proto::ProtoError;
-use crate::connection_proto::ProtoMessageParse;
+use crate::connection_proto::PayloadTypeExt;
 
-pub enum CTraderResponseType {
-  ExecutionEvent(Box<types::ExecutionEvent>),
-  ReconcileRes(Box<types::ReconcileRes>),
-  ApplicationAuthRes(Box<types::ApplicationAuthRes>),
-  AccountAuthRes(Box<types::AccountAuthRes>),
-  VersionRes(Box<types::VersionRes>),
-  ErrorRes(Box<types::ErrorRes>),
-  SpotEvent(Box<types::SpotEvent>),
-  AssetListRes(Box<types::AssetListRes>),
-  SymbolsListRes(Box<types::SymbolsListRes>),
-  SymbolByIdRes(Box<types::SymbolByIdRes>),
-  SymbolsForConversionRes(Box<types::SymbolsForConversionRes>),
-  TraderRes(Box<types::TraderRes>),
-  SubscribeSpotsRes(Box<types::SubscribeSpotsRes>),
-  UnsubscribeSpotsRes(Box<types::UnsubscribeSpotsRes>),
-  DealListRes(Box<types::DealListRes>),
-  SubscribeLiveTrendbarRes(Box<types::SubscribeLiveTrendbarRes>),
-  UnsubscribeLiveTrendbarRes(Box<types::UnsubscribeLiveTrendbarRes>),
-  GetTrendbarsRes(Box<types::GetTrendbarsRes>),
-  ExpectedMarginRes(Box<types::ExpectedMarginRes>),
-  CashFlowHistoryListRes(Box<types::CashFlowHistoryListRes>),
-  GetTickDataRes(Box<types::GetTickDataRes>),
-  GetAccountListByAccessTokenRes(Box<types::GetAccountListByAccessTokenRes>),
-  GetCtidProfileByTokenRes(Box<types::GetCtidProfileByTokenRes>),
-  AssetClassListRes(Box<types::AssetClassListRes>),
-  SubscribeDepthQuotesRes(Box<types::SubscribeDepthQuotesRes>),
-  UnsubscribeDepthQuotesRes(Box<types::UnsubscribeDepthQuotesRes>),
-  SymbolCategoryListRes(Box<types::SymbolCategoryListRes>),
-  AccountLogoutRes(Box<types::AccountLogoutRes>),
-  MarginCallListRes(Box<types::MarginCallListRes>),
-  MarginCallUpdateRes(Box<types::MarginCallUpdateRes>),
-  RefreshTokenRes(Box<types::RefreshTokenRes>),
-  OrderListRes(Box<types::OrderListRes>),
-  GetDynamicLeverageByIdRes(Box<types::GetDynamicLeverageByIdRes>),
-  DealListByPositionIdRes(Box<types::DealListByPositionIdRes>),
-  OrderDetailsRes(Box<types::OrderDetailsRes>),
-  OrderListByPositionIdRes(Box<types::OrderListByPositionIdRes>),
-  DealOffsetListRes(Box<types::DealOffsetListRes>),
-  GetPositionUnrealizedPnLRes(Box<types::GetPositionUnrealizedPnLRes>),
+pub enum CTraderRequestType {
+  ApplicationAuthReq(Box<types::ApplicationAuthReq>),
+  AccountAuthReq(Box<types::AccountAuthReq>),
+  VersionReq(Box<types::VersionReq>),
+  NewOrderReq(Box<types::NewOrderReq>),
+  CancelOrderReq(Box<types::CancelOrderReq>),
+  AmendOrderReq(Box<types::AmendOrderReq>),
+  AmendPositionSltpReq(Box<types::AmendPositionSltpReq>),
+  ClosePositionReq(Box<types::ClosePositionReq>),
+  AssetListReq(Box<types::AssetListReq>),
+  SymbolsListReq(Box<types::SymbolsListReq>),
+  SymbolByIdReq(Box<types::SymbolByIdReq>),
+  SymbolsForConversionReq(Box<types::SymbolsForConversionReq>),
+  TraderReq(Box<types::TraderReq>),
+  ReconcileReq(Box<types::ReconcileReq>),
+  SubscribeSpotsReq(Box<types::SubscribeSpotsReq>),
+  UnsubscribeSpotsReq(Box<types::UnsubscribeSpotsReq>),
+  DealListReq(Box<types::DealListReq>),
+  SubscribeLiveTrendbarReq(Box<types::SubscribeLiveTrendbarReq>),
+  UnsubscribeLiveTrendbarReq(Box<types::UnsubscribeLiveTrendbarReq>),
+  GetTrendbarsReq(Box<types::GetTrendbarsReq>),
+  ExpectedMarginReq(Box<types::ExpectedMarginReq>),
+  CashFlowHistoryListReq(Box<types::CashFlowHistoryListReq>),
+  GetTickDataReq(Box<types::GetTickDataReq>),
+  GetAccountListByAccessTokenReq(Box<types::GetAccountListByAccessTokenReq>),
+  GetCtidProfileByTokenReq(Box<types::GetCtidProfileByTokenReq>),
+  AssetClassListReq(Box<types::AssetClassListReq>),
+  SubscribeDepthQuotesReq(Box<types::SubscribeDepthQuotesReq>),
+  UnsubscribeDepthQuotesReq(Box<types::UnsubscribeDepthQuotesReq>),
+  SymbolCategoryListReq(Box<types::SymbolCategoryListReq>),
+  AccountLogoutReq(Box<types::AccountLogoutReq>),
+  MarginCallListReq(Box<types::MarginCallListReq>),
+  MarginCallUpdateReq(Box<types::MarginCallUpdateReq>),
+  RefreshTokenReq(Box<types::RefreshTokenReq>),
+  OrderListReq(Box<types::OrderListReq>),
+  GetDynamicLeverageByIdReq(Box<types::GetDynamicLeverageByIdReq>),
+  DealListByPositionIdReq(Box<types::DealListByPositionIdReq>),
+  OrderDetailsReq(Box<types::OrderDetailsReq>),
+  OrderListByPositionIdReq(Box<types::OrderListByPositionIdReq>),
+  DealOffsetListReq(Box<types::DealOffsetListReq>),
+  GetPositionUnrealizedPnLReq(Box<types::GetPositionUnrealizedPnLReq>),
 }
 
-impl TryFrom<ct::ProtoMessage> for CTraderResponseType {
-  type Error = ProtoError;
-
-  fn try_from(value: ct::ProtoMessage) -> Result<Self, Self::Error> {
-    let map_err = |_err: anyhow::Error| {
-      ProtoError::PayloadParseError(value.client_msg_id.clone(), value.payload_type)
-    };
-
-    match value.try_payload_type() {
-      // Events (no client_msg_id)
-      Ok(ct::ProtoOaPayloadType::ProtoOaExecutionEvent) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaExecutionEvent>()?;
-        let res = types::ExecutionEvent::try_from(proto_res).map_err(map_err)?;
-        Ok(CTraderResponseType::ExecutionEvent(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaSpotEvent) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaSpotEvent>()?;
-        let res = types::SpotEvent::try_from(proto_res).map_err(map_err)?;
-        Ok(CTraderResponseType::SpotEvent(Box::new(res)))
-      }
-      // Responses with client_msg_id and From conversion
-      Ok(ct::ProtoOaPayloadType::ProtoOaApplicationAuthRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaApplicationAuthRes>()?;
-        let mut res = types::ApplicationAuthRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::ApplicationAuthRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaAccountAuthRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaAccountAuthRes>()?;
-        let mut res = types::AccountAuthRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::AccountAuthRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaVersionRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaVersionRes>()?;
-        let mut res = types::VersionRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::VersionRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaErrorRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaErrorRes>()?;
-        let mut res = types::ErrorRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::ErrorRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaAssetListRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaAssetListRes>()?;
-        let mut res = types::AssetListRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::AssetListRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaSymbolsListRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaSymbolsListRes>()?;
-        let mut res = types::SymbolsListRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::SymbolsListRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaSymbolsForConversionRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaSymbolsForConversionRes>()?;
-        let mut res = types::SymbolsForConversionRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::SymbolsForConversionRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaTraderRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaTraderRes>()?;
-        let mut res = types::TraderRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::TraderRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaSubscribeSpotsRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaSubscribeSpotsRes>()?;
-        let mut res = types::SubscribeSpotsRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::SubscribeSpotsRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaUnsubscribeSpotsRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaUnsubscribeSpotsRes>()?;
-        let mut res = types::UnsubscribeSpotsRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::UnsubscribeSpotsRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaExpectedMarginRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaExpectedMarginRes>()?;
-        let mut res = types::ExpectedMarginRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::ExpectedMarginRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaSubscribeLiveTrendbarRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaSubscribeLiveTrendbarRes>()?;
-        let mut res = types::SubscribeLiveTrendbarRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::SubscribeLiveTrendbarRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaUnsubscribeLiveTrendbarRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaUnsubscribeLiveTrendbarRes>()?;
-        let mut res = types::UnsubscribeLiveTrendbarRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::UnsubscribeLiveTrendbarRes(Box::new(
-          res,
-        )))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaSubscribeDepthQuotesRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaSubscribeDepthQuotesRes>()?;
-        let mut res = types::SubscribeDepthQuotesRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::SubscribeDepthQuotesRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaUnsubscribeDepthQuotesRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaUnsubscribeDepthQuotesRes>()?;
-        let mut res = types::UnsubscribeDepthQuotesRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::UnsubscribeDepthQuotesRes(Box::new(
-          res,
-        )))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaAccountLogoutRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaAccountLogoutRes>()?;
-        let mut res = types::AccountLogoutRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::AccountLogoutRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaMarginCallListRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaMarginCallListRes>()?;
-        let mut res = types::MarginCallListRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::MarginCallListRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaMarginCallUpdateRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaMarginCallUpdateRes>()?;
-        let mut res = types::MarginCallUpdateRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::MarginCallUpdateRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaRefreshTokenRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaRefreshTokenRes>()?;
-        let mut res = types::RefreshTokenRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::RefreshTokenRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaDealOffsetListRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaDealOffsetListRes>()?;
-        let mut res = types::DealOffsetListRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::DealOffsetListRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaAssetClassListRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaAssetClassListRes>()?;
-        let mut res = types::AssetClassListRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::AssetClassListRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaGetCtidProfileByTokenRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaGetCtidProfileByTokenRes>()?;
-        let mut res = types::GetCtidProfileByTokenRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::GetCtidProfileByTokenRes(Box::new(res)))
-      }
-      // Payload type names that differ from proto struct names (From conversion)
-      Ok(ct::ProtoOaPayloadType::ProtoOaGetTickdataRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaGetTickDataRes>()?;
-        let mut res = types::GetTickDataRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::GetTickDataRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaSymbolCategoryRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaSymbolCategoryListRes>()?;
-        let mut res = types::SymbolCategoryListRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::SymbolCategoryListRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaGetDynamicLeverageRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaGetDynamicLeverageByIdRes>()?;
-        let mut res = types::GetDynamicLeverageByIdRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::GetDynamicLeverageByIdRes(Box::new(
-          res,
-        )))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaGetPositionUnrealizedPnlRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaGetPositionUnrealizedPnLRes>()?;
-        let mut res = types::GetPositionUnrealizedPnLRes::from(proto_res);
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::GetPositionUnrealizedPnLRes(Box::new(
-          res,
-        )))
-      }
-      // Responses with client_msg_id and TryFrom conversion
-      Ok(ct::ProtoOaPayloadType::ProtoOaReconcileRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaReconcileRes>()?;
-        let mut res = types::ReconcileRes::try_from(proto_res).map_err(map_err)?;
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::ReconcileRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaSymbolByIdRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaSymbolByIdRes>()?;
-        let mut res = types::SymbolByIdRes::try_from(proto_res).map_err(map_err)?;
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::SymbolByIdRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaDealListRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaDealListRes>()?;
-        let mut res = types::DealListRes::try_from(proto_res).map_err(map_err)?;
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::DealListRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaGetTrendbarsRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaGetTrendbarsRes>()?;
-        let mut res = types::GetTrendbarsRes::try_from(proto_res).map_err(map_err)?;
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::GetTrendbarsRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaCashFlowHistoryListRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaCashFlowHistoryListRes>()?;
-        let mut res = types::CashFlowHistoryListRes::try_from(proto_res).map_err(map_err)?;
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::CashFlowHistoryListRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaGetAccountsByAccessTokenRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaGetAccountListByAccessTokenRes>()?;
-        let mut res =
-          types::GetAccountListByAccessTokenRes::try_from(proto_res).map_err(map_err)?;
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::GetAccountListByAccessTokenRes(
-          Box::new(res),
-        ))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaOrderListRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaOrderListRes>()?;
-        let mut res = types::OrderListRes::try_from(proto_res).map_err(map_err)?;
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::OrderListRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaDealListByPositionIdRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaDealListByPositionIdRes>()?;
-        let mut res = types::DealListByPositionIdRes::try_from(proto_res).map_err(map_err)?;
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::DealListByPositionIdRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaOrderDetailsRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaOrderDetailsRes>()?;
-        let mut res = types::OrderDetailsRes::try_from(proto_res).map_err(map_err)?;
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::OrderDetailsRes(Box::new(res)))
-      }
-      Ok(ct::ProtoOaPayloadType::ProtoOaOrderListByPositionIdRes) => {
-        let proto_res = value.try_decode_payload::<ct::ProtoOaOrderListByPositionIdRes>()?;
-        let mut res = types::OrderListByPositionIdRes::try_from(proto_res).map_err(map_err)?;
-        res.client_msg_id = value.client_msg_id;
-        Ok(CTraderResponseType::OrderListByPositionIdRes(Box::new(res)))
-      }
-      Ok(payload_type) => Err(ProtoError::UnknownPayloadType(
-        value.client_msg_id,
-        payload_type as i32,
-      )),
-      Err(err) => Err(err),
+impl Into<ProtoMessage> for CTraderRequestType {
+  fn into(self) -> ProtoMessage {
+    match self {
+      Self::ApplicationAuthReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaApplicationAuthReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaApplicationAuthReq {
+            payload_type: None,
+            client_id: req.client_id,
+            client_secret: req.client_secret,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::AccountAuthReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaAccountAuthReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaAccountAuthReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            access_token: req.access_token,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::VersionReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaVersionReq.as_u32(),
+        payload: Some(ct::ProtoOaVersionReq { payload_type: None }.encode_to_vec()),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::NewOrderReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaNewOrderReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaNewOrderReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            symbol_id: req.symbol_id,
+            order_type: req.order_type.into(),
+            trade_side: req.trade_side.into(),
+            volume: req.volume,
+            limit_price: req.limit_price,
+            stop_price: req.stop_price,
+            time_in_force: req.time_in_force.map(|v| v.into()),
+            expiration_timestamp: req.expiration_timestamp,
+            stop_loss: req.stop_loss,
+            take_profit: req.take_profit,
+            comment: req.comment,
+            base_slippage_price: req.base_slippage_price,
+            slippage_in_points: req.slippage_in_points,
+            label: req.label,
+            position_id: req.position_id,
+            client_order_id: req.client_order_id,
+            relative_stop_loss: req.relative_stop_loss,
+            relative_take_profit: req.relative_take_profit,
+            guaranteed_stop_loss: req.guaranteed_stop_loss,
+            trailing_stop_loss: req.trailing_stop_loss,
+            stop_trigger_method: req.stop_trigger_method.map(|v| v.into()),
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::CancelOrderReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaCancelOrderReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaCancelOrderReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            order_id: req.order_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::AmendOrderReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaAmendOrderReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaAmendOrderReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            order_id: req.order_id,
+            volume: req.volume,
+            limit_price: req.limit_price,
+            stop_price: req.stop_price,
+            expiration_timestamp: req.expiration_timestamp,
+            stop_loss: req.stop_loss,
+            take_profit: req.take_profit,
+            slippage_in_points: req.slippage_in_points,
+            relative_stop_loss: req.relative_stop_loss,
+            relative_take_profit: req.relative_take_profit,
+            guaranteed_stop_loss: req.guaranteed_stop_loss,
+            trailing_stop_loss: req.trailing_stop_loss,
+            stop_trigger_method: req.stop_trigger_method.map(|v| v.into()),
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::AmendPositionSltpReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaAmendPositionSltpReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaAmendPositionSltpReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            position_id: req.position_id,
+            stop_loss: req.stop_loss,
+            take_profit: req.take_profit,
+            guaranteed_stop_loss: req.guaranteed_stop_loss,
+            trailing_stop_loss: req.trailing_stop_loss,
+            stop_loss_trigger_method: req.stop_loss_trigger_method.map(|v| v.into()),
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::ClosePositionReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaClosePositionReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaClosePositionReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            position_id: req.position_id,
+            volume: req.volume,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::AssetListReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaAssetListReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaAssetListReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::SymbolsListReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaSymbolsListReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaSymbolsListReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            include_archived_symbols: req.include_archived_symbols,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::SymbolByIdReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaSymbolByIdReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaSymbolByIdReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            symbol_id: req.symbol_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::SymbolsForConversionReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaSymbolsForConversionReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaSymbolsForConversionReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            first_asset_id: req.first_asset_id,
+            last_asset_id: req.last_asset_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::TraderReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaTraderReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaTraderReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::ReconcileReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaReconcileReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaReconcileReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            return_protection_orders: req.return_protection_orders,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::SubscribeSpotsReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaSubscribeSpotsReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaSubscribeSpotsReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            symbol_id: req.symbol_id,
+            subscribe_to_spot_timestamp: req.subscribe_to_spot_timestamp,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::UnsubscribeSpotsReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaUnsubscribeSpotsReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaUnsubscribeSpotsReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            symbol_id: req.symbol_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::DealListReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaDealListReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaDealListReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            from_timestamp: req.from_timestamp,
+            to_timestamp: req.to_timestamp,
+            max_rows: req.max_rows,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::SubscribeLiveTrendbarReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaSubscribeLiveTrendbarReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaSubscribeLiveTrendbarReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            period: req.period.into(),
+            symbol_id: req.symbol_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::UnsubscribeLiveTrendbarReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaUnsubscribeLiveTrendbarReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaUnsubscribeLiveTrendbarReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            period: req.period.into(),
+            symbol_id: req.symbol_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::GetTrendbarsReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaGetTrendbarsReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaGetTrendbarsReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            from_timestamp: req.from_timestamp,
+            to_timestamp: req.to_timestamp,
+            period: req.period.into(),
+            symbol_id: req.symbol_id,
+            count: req.count,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::ExpectedMarginReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaExpectedMarginReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaExpectedMarginReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            symbol_id: req.symbol_id,
+            volume: req.volume,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::CashFlowHistoryListReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaCashFlowHistoryListReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaCashFlowHistoryListReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            from_timestamp: req.from_timestamp,
+            to_timestamp: req.to_timestamp,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::GetTickDataReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaGetTickdataReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaGetTickDataReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            symbol_id: req.symbol_id,
+            r#type: req.r#type.into(),
+            from_timestamp: req.from_timestamp,
+            to_timestamp: req.to_timestamp,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::GetAccountListByAccessTokenReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaGetAccountsByAccessTokenReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaGetAccountListByAccessTokenReq {
+            payload_type: None,
+            access_token: req.access_token,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::GetCtidProfileByTokenReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaGetCtidProfileByTokenReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaGetCtidProfileByTokenReq {
+            payload_type: None,
+            access_token: req.access_token,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::AssetClassListReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaAssetClassListReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaAssetClassListReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::SubscribeDepthQuotesReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaSubscribeDepthQuotesReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaSubscribeDepthQuotesReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            symbol_id: req.symbol_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::UnsubscribeDepthQuotesReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaUnsubscribeDepthQuotesReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaUnsubscribeDepthQuotesReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            symbol_id: req.symbol_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::SymbolCategoryListReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaSymbolCategoryReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaSymbolCategoryListReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::AccountLogoutReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaAccountLogoutReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaAccountLogoutReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::MarginCallListReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaMarginCallListReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaMarginCallListReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::MarginCallUpdateReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaMarginCallUpdateReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaMarginCallUpdateReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            margin_call: ct::ProtoOaMarginCall {
+              margin_call_type: req.margin_call.margin_call_type,
+              margin_level_threshold: req.margin_call.margin_level_threshold,
+              utc_last_update_timestamp: req.margin_call.utc_last_update_timestamp,
+            },
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::RefreshTokenReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaRefreshTokenReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaRefreshTokenReq {
+            payload_type: None,
+            refresh_token: req.refresh_token,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::OrderListReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaOrderListReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaOrderListReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            from_timestamp: req.from_timestamp,
+            to_timestamp: req.to_timestamp,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::GetDynamicLeverageByIdReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaGetDynamicLeverageReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaGetDynamicLeverageByIdReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            leverage_id: req.leverage_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::DealListByPositionIdReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaDealListByPositionIdReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaDealListByPositionIdReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            position_id: req.position_id,
+            from_timestamp: req.from_timestamp,
+            to_timestamp: req.to_timestamp,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::OrderDetailsReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaOrderDetailsReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaOrderDetailsReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            order_id: req.order_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::OrderListByPositionIdReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaOrderListByPositionIdReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaOrderListByPositionIdReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            position_id: req.position_id,
+            from_timestamp: req.from_timestamp,
+            to_timestamp: req.to_timestamp,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::DealOffsetListReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaDealOffsetListReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaDealOffsetListReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+            deal_id: req.deal_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
+      Self::GetPositionUnrealizedPnLReq(req) => ProtoMessage {
+        payload_type: ct::ProtoOaPayloadType::ProtoOaGetPositionUnrealizedPnlReq.as_u32(),
+        payload: Some(
+          ct::ProtoOaGetPositionUnrealizedPnLReq {
+            payload_type: None,
+            ctid_trader_account_id: req.ctid_trader_account_id,
+          }
+          .encode_to_vec(),
+        ),
+        client_msg_id: req.client_msg_id,
+      },
     }
   }
 }
