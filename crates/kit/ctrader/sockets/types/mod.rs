@@ -1,5 +1,6 @@
 mod access_rights;
 mod account_type;
+mod symbols_list_res;
 mod archived_symbol;
 mod asset;
 mod asset_class;
@@ -58,6 +59,7 @@ mod trendbar;
 mod trendbar_period;
 mod trigger_method;
 
+pub use self::symbols_list_res::*;
 pub use self::access_rights::*;
 pub use self::account_type::*;
 pub use self::archived_symbol::*;

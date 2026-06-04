@@ -4,7 +4,7 @@ mod req_reconcile;
 mod req_subscribe_spots;
 mod req_symbols_list;
 mod socket_client;
-mod types;
+pub mod types;
 
 pub use self::req_close_order::*;
 pub use self::req_new_order::*;

@@ -4,6 +4,7 @@ members = [
     "./crates/cmd/*",
     "./crates/kit/*",
     "./crates/platform/*",
+    "./examples_bots/rust_bot",
 ]
 
 [workspace.lints.rust]
@@ -27,11 +28,15 @@ codegen-units = 1
 rpath = false
 
 [workspace.dependencies]
+onlytrades_bot = { package = "onlytrades_bot", path = "./crates/cmd/onlytrades_bot" }
+onlytrades_macros = { package = "onlytrades_macros", path = "./crates/cmd/onlytrades_macros" }
+
 kit_auth0 = { package = "onlytrades_auth0", path = "./crates/kit/auth0" }
 kit_b64 = { package = "onlytrades_b64", path = "./crates/kit/b64" }
 kit_compress = { package = "onlytrades_compress", path = "./crates/kit/compress" }
 kit_ctrader = { package = "onlytrades_ctrader", path = "./crates/kit/ctrader" }
 kit_ctrader_proto = { package = "onlytrades_ctrader_proto", path = "./crates/kit/ctrader_proto" }
+kit_ctrader_rest = { package = "onlytrades_ctrader_rest", path = "./crates/kit/ctrader_rest" }
 kit_hash = { package = "onlytrades_hash", path = "./crates/kit/hash" }
 kit_std_ext = { package = "onlytrades_std_ext", path = "./crates/kit/std_ext" }
 kit_turso = { package = "onlytrades_turso", path = "./crates/kit/turso" }
@@ -56,12 +61,15 @@ include_dir = "0.7"
 jsonwebtoken = "10"
 libsql = "0.9"
 num_enum = "0.7"
+proc-macro2 = "1"
 prost = "0.14"
+quote = "1"
 reqwest = "0.13"
 serde = "1"
 serde_json = "1"
 serde_urlencoded = "0.7"
 sha2 = "0.11"
+syn = "2"
 sysinfo = "0.39"
 thiserror = "2"
 tokio = "1"

@@ -1,0 +1,15 @@
+[package]
+name = "onlytrades_examples_rust_bot"
+version = "0.0.0-local"
+authors = ["David Alsh"]
+repository = "https://github.com/alshdavid/onlytrades.live"
+description = "Trade Automation Refined"
+edition = "2024"
+license = "MIT"
+
+[[bin]]
+name = "onlytrades_examples_rust_bot"
+path = "./main.rs"
+
+[dependencies]
+onlytrades_bot = { workspace = true }
