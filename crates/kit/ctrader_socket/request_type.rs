@@ -6,52 +6,52 @@ use super::types;
 use crate::connection_proto::PayloadTypeExt;
 
 pub enum CTraderRequestType {
-  ApplicationAuthReq(Box<types::ApplicationAuthReq>),
-  AccountAuthReq(Box<types::AccountAuthReq>),
-  VersionReq(Box<types::VersionReq>),
-  NewOrderReq(Box<types::NewOrderReq>),
-  CancelOrderReq(Box<types::CancelOrderReq>),
-  AmendOrderReq(Box<types::AmendOrderReq>),
-  AmendPositionSltpReq(Box<types::AmendPositionSltpReq>),
-  ClosePositionReq(Box<types::ClosePositionReq>),
-  AssetListReq(Box<types::AssetListReq>),
-  SymbolsListReq(Box<types::SymbolsListReq>),
-  SymbolByIdReq(Box<types::SymbolByIdReq>),
-  SymbolsForConversionReq(Box<types::SymbolsForConversionReq>),
-  TraderReq(Box<types::TraderReq>),
-  ReconcileReq(Box<types::ReconcileReq>),
-  SubscribeSpotsReq(Box<types::SubscribeSpotsReq>),
-  UnsubscribeSpotsReq(Box<types::UnsubscribeSpotsReq>),
-  DealListReq(Box<types::DealListReq>),
-  SubscribeLiveTrendbarReq(Box<types::SubscribeLiveTrendbarReq>),
-  UnsubscribeLiveTrendbarReq(Box<types::UnsubscribeLiveTrendbarReq>),
-  GetTrendbarsReq(Box<types::GetTrendbarsReq>),
-  ExpectedMarginReq(Box<types::ExpectedMarginReq>),
-  CashFlowHistoryListReq(Box<types::CashFlowHistoryListReq>),
-  GetTickDataReq(Box<types::GetTickDataReq>),
-  GetAccountListByAccessTokenReq(Box<types::GetAccountListByAccessTokenReq>),
-  GetCtidProfileByTokenReq(Box<types::GetCtidProfileByTokenReq>),
-  AssetClassListReq(Box<types::AssetClassListReq>),
-  SubscribeDepthQuotesReq(Box<types::SubscribeDepthQuotesReq>),
-  UnsubscribeDepthQuotesReq(Box<types::UnsubscribeDepthQuotesReq>),
-  SymbolCategoryListReq(Box<types::SymbolCategoryListReq>),
-  AccountLogoutReq(Box<types::AccountLogoutReq>),
-  MarginCallListReq(Box<types::MarginCallListReq>),
-  MarginCallUpdateReq(Box<types::MarginCallUpdateReq>),
-  RefreshTokenReq(Box<types::RefreshTokenReq>),
-  OrderListReq(Box<types::OrderListReq>),
-  GetDynamicLeverageByIdReq(Box<types::GetDynamicLeverageByIdReq>),
-  DealListByPositionIdReq(Box<types::DealListByPositionIdReq>),
-  OrderDetailsReq(Box<types::OrderDetailsReq>),
-  OrderListByPositionIdReq(Box<types::OrderListByPositionIdReq>),
-  DealOffsetListReq(Box<types::DealOffsetListReq>),
-  GetPositionUnrealizedPnLReq(Box<types::GetPositionUnrealizedPnLReq>),
+  ApplicationAuthReq(types::ApplicationAuthReq),
+  AccountAuthReq(types::AccountAuthReq),
+  VersionReq(types::VersionReq),
+  NewOrderReq(types::NewOrderReq),
+  CancelOrderReq(types::CancelOrderReq),
+  AmendOrderReq(types::AmendOrderReq),
+  AmendPositionSltpReq(types::AmendPositionSltpReq),
+  ClosePositionReq(types::ClosePositionReq),
+  AssetListReq(types::AssetListReq),
+  SymbolsListReq(types::SymbolsListReq),
+  SymbolByIdReq(types::SymbolByIdReq),
+  SymbolsForConversionReq(types::SymbolsForConversionReq),
+  TraderReq(types::TraderReq),
+  ReconcileReq(types::ReconcileReq),
+  SubscribeSpotsReq(types::SubscribeSpotsReq),
+  UnsubscribeSpotsReq(types::UnsubscribeSpotsReq),
+  DealListReq(types::DealListReq),
+  SubscribeLiveTrendbarReq(types::SubscribeLiveTrendbarReq),
+  UnsubscribeLiveTrendbarReq(types::UnsubscribeLiveTrendbarReq),
+  GetTrendbarsReq(types::GetTrendbarsReq),
+  ExpectedMarginReq(types::ExpectedMarginReq),
+  CashFlowHistoryListReq(types::CashFlowHistoryListReq),
+  GetTickDataReq(types::GetTickDataReq),
+  GetAccountListByAccessTokenReq(types::GetAccountListByAccessTokenReq),
+  GetCtidProfileByTokenReq(types::GetCtidProfileByTokenReq),
+  AssetClassListReq(types::AssetClassListReq),
+  SubscribeDepthQuotesReq(types::SubscribeDepthQuotesReq),
+  UnsubscribeDepthQuotesReq(types::UnsubscribeDepthQuotesReq),
+  SymbolCategoryListReq(types::SymbolCategoryListReq),
+  AccountLogoutReq(types::AccountLogoutReq),
+  MarginCallListReq(types::MarginCallListReq),
+  MarginCallUpdateReq(types::MarginCallUpdateReq),
+  RefreshTokenReq(types::RefreshTokenReq),
+  OrderListReq(types::OrderListReq),
+  GetDynamicLeverageByIdReq(types::GetDynamicLeverageByIdReq),
+  DealListByPositionIdReq(types::DealListByPositionIdReq),
+  OrderDetailsReq(types::OrderDetailsReq),
+  OrderListByPositionIdReq(types::OrderListByPositionIdReq),
+  DealOffsetListReq(types::DealOffsetListReq),
+  GetPositionUnrealizedPnLReq(types::GetPositionUnrealizedPnLReq),
 }
 
-impl Into<ProtoMessage> for CTraderRequestType {
-  fn into(self) -> ProtoMessage {
-    match self {
-      Self::ApplicationAuthReq(req) => ProtoMessage {
+impl From<CTraderRequestType> for ProtoMessage {
+  fn from(val: CTraderRequestType) -> Self {
+    match val {
+      CTraderRequestType::ApplicationAuthReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaApplicationAuthReq.as_u32(),
         payload: Some(
           ct::ProtoOaApplicationAuthReq {
@@ -63,7 +63,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::AccountAuthReq(req) => ProtoMessage {
+      CTraderRequestType::AccountAuthReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaAccountAuthReq.as_u32(),
         payload: Some(
           ct::ProtoOaAccountAuthReq {
@@ -75,12 +75,12 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::VersionReq(req) => ProtoMessage {
+      CTraderRequestType::VersionReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaVersionReq.as_u32(),
         payload: Some(ct::ProtoOaVersionReq { payload_type: None }.encode_to_vec()),
         client_msg_id: req.client_msg_id,
       },
-      Self::NewOrderReq(req) => ProtoMessage {
+      CTraderRequestType::NewOrderReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaNewOrderReq.as_u32(),
         payload: Some(
           ct::ProtoOaNewOrderReq {
@@ -112,7 +112,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::CancelOrderReq(req) => ProtoMessage {
+      CTraderRequestType::CancelOrderReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaCancelOrderReq.as_u32(),
         payload: Some(
           ct::ProtoOaCancelOrderReq {
@@ -124,7 +124,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::AmendOrderReq(req) => ProtoMessage {
+      CTraderRequestType::AmendOrderReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaAmendOrderReq.as_u32(),
         payload: Some(
           ct::ProtoOaAmendOrderReq {
@@ -148,7 +148,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::AmendPositionSltpReq(req) => ProtoMessage {
+      CTraderRequestType::AmendPositionSltpReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaAmendPositionSltpReq.as_u32(),
         payload: Some(
           ct::ProtoOaAmendPositionSltpReq {
@@ -165,7 +165,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::ClosePositionReq(req) => ProtoMessage {
+      CTraderRequestType::ClosePositionReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaClosePositionReq.as_u32(),
         payload: Some(
           ct::ProtoOaClosePositionReq {
@@ -178,7 +178,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::AssetListReq(req) => ProtoMessage {
+      CTraderRequestType::AssetListReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaAssetListReq.as_u32(),
         payload: Some(
           ct::ProtoOaAssetListReq {
@@ -189,7 +189,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::SymbolsListReq(req) => ProtoMessage {
+      CTraderRequestType::SymbolsListReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaSymbolsListReq.as_u32(),
         payload: Some(
           ct::ProtoOaSymbolsListReq {
@@ -201,7 +201,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::SymbolByIdReq(req) => ProtoMessage {
+      CTraderRequestType::SymbolByIdReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaSymbolByIdReq.as_u32(),
         payload: Some(
           ct::ProtoOaSymbolByIdReq {
@@ -213,7 +213,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::SymbolsForConversionReq(req) => ProtoMessage {
+      CTraderRequestType::SymbolsForConversionReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaSymbolsForConversionReq.as_u32(),
         payload: Some(
           ct::ProtoOaSymbolsForConversionReq {
@@ -226,7 +226,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::TraderReq(req) => ProtoMessage {
+      CTraderRequestType::TraderReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaTraderReq.as_u32(),
         payload: Some(
           ct::ProtoOaTraderReq {
@@ -237,7 +237,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::ReconcileReq(req) => ProtoMessage {
+      CTraderRequestType::ReconcileReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaReconcileReq.as_u32(),
         payload: Some(
           ct::ProtoOaReconcileReq {
@@ -249,7 +249,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::SubscribeSpotsReq(req) => ProtoMessage {
+      CTraderRequestType::SubscribeSpotsReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaSubscribeSpotsReq.as_u32(),
         payload: Some(
           ct::ProtoOaSubscribeSpotsReq {
@@ -262,7 +262,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::UnsubscribeSpotsReq(req) => ProtoMessage {
+      CTraderRequestType::UnsubscribeSpotsReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaUnsubscribeSpotsReq.as_u32(),
         payload: Some(
           ct::ProtoOaUnsubscribeSpotsReq {
@@ -274,7 +274,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::DealListReq(req) => ProtoMessage {
+      CTraderRequestType::DealListReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaDealListReq.as_u32(),
         payload: Some(
           ct::ProtoOaDealListReq {
@@ -288,7 +288,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::SubscribeLiveTrendbarReq(req) => ProtoMessage {
+      CTraderRequestType::SubscribeLiveTrendbarReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaSubscribeLiveTrendbarReq.as_u32(),
         payload: Some(
           ct::ProtoOaSubscribeLiveTrendbarReq {
@@ -301,7 +301,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::UnsubscribeLiveTrendbarReq(req) => ProtoMessage {
+      CTraderRequestType::UnsubscribeLiveTrendbarReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaUnsubscribeLiveTrendbarReq.as_u32(),
         payload: Some(
           ct::ProtoOaUnsubscribeLiveTrendbarReq {
@@ -314,7 +314,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::GetTrendbarsReq(req) => ProtoMessage {
+      CTraderRequestType::GetTrendbarsReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaGetTrendbarsReq.as_u32(),
         payload: Some(
           ct::ProtoOaGetTrendbarsReq {
@@ -330,7 +330,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::ExpectedMarginReq(req) => ProtoMessage {
+      CTraderRequestType::ExpectedMarginReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaExpectedMarginReq.as_u32(),
         payload: Some(
           ct::ProtoOaExpectedMarginReq {
@@ -343,7 +343,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::CashFlowHistoryListReq(req) => ProtoMessage {
+      CTraderRequestType::CashFlowHistoryListReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaCashFlowHistoryListReq.as_u32(),
         payload: Some(
           ct::ProtoOaCashFlowHistoryListReq {
@@ -356,7 +356,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::GetTickDataReq(req) => ProtoMessage {
+      CTraderRequestType::GetTickDataReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaGetTickdataReq.as_u32(),
         payload: Some(
           ct::ProtoOaGetTickDataReq {
@@ -371,7 +371,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::GetAccountListByAccessTokenReq(req) => ProtoMessage {
+      CTraderRequestType::GetAccountListByAccessTokenReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaGetAccountsByAccessTokenReq.as_u32(),
         payload: Some(
           ct::ProtoOaGetAccountListByAccessTokenReq {
@@ -382,7 +382,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::GetCtidProfileByTokenReq(req) => ProtoMessage {
+      CTraderRequestType::GetCtidProfileByTokenReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaGetCtidProfileByTokenReq.as_u32(),
         payload: Some(
           ct::ProtoOaGetCtidProfileByTokenReq {
@@ -393,7 +393,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::AssetClassListReq(req) => ProtoMessage {
+      CTraderRequestType::AssetClassListReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaAssetClassListReq.as_u32(),
         payload: Some(
           ct::ProtoOaAssetClassListReq {
@@ -404,7 +404,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::SubscribeDepthQuotesReq(req) => ProtoMessage {
+      CTraderRequestType::SubscribeDepthQuotesReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaSubscribeDepthQuotesReq.as_u32(),
         payload: Some(
           ct::ProtoOaSubscribeDepthQuotesReq {
@@ -416,7 +416,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::UnsubscribeDepthQuotesReq(req) => ProtoMessage {
+      CTraderRequestType::UnsubscribeDepthQuotesReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaUnsubscribeDepthQuotesReq.as_u32(),
         payload: Some(
           ct::ProtoOaUnsubscribeDepthQuotesReq {
@@ -428,7 +428,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::SymbolCategoryListReq(req) => ProtoMessage {
+      CTraderRequestType::SymbolCategoryListReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaSymbolCategoryReq.as_u32(),
         payload: Some(
           ct::ProtoOaSymbolCategoryListReq {
@@ -439,7 +439,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::AccountLogoutReq(req) => ProtoMessage {
+      CTraderRequestType::AccountLogoutReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaAccountLogoutReq.as_u32(),
         payload: Some(
           ct::ProtoOaAccountLogoutReq {
@@ -450,7 +450,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::MarginCallListReq(req) => ProtoMessage {
+      CTraderRequestType::MarginCallListReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaMarginCallListReq.as_u32(),
         payload: Some(
           ct::ProtoOaMarginCallListReq {
@@ -461,7 +461,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::MarginCallUpdateReq(req) => ProtoMessage {
+      CTraderRequestType::MarginCallUpdateReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaMarginCallUpdateReq.as_u32(),
         payload: Some(
           ct::ProtoOaMarginCallUpdateReq {
@@ -477,7 +477,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::RefreshTokenReq(req) => ProtoMessage {
+      CTraderRequestType::RefreshTokenReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaRefreshTokenReq.as_u32(),
         payload: Some(
           ct::ProtoOaRefreshTokenReq {
@@ -488,7 +488,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::OrderListReq(req) => ProtoMessage {
+      CTraderRequestType::OrderListReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaOrderListReq.as_u32(),
         payload: Some(
           ct::ProtoOaOrderListReq {
@@ -501,7 +501,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::GetDynamicLeverageByIdReq(req) => ProtoMessage {
+      CTraderRequestType::GetDynamicLeverageByIdReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaGetDynamicLeverageReq.as_u32(),
         payload: Some(
           ct::ProtoOaGetDynamicLeverageByIdReq {
@@ -513,7 +513,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::DealListByPositionIdReq(req) => ProtoMessage {
+      CTraderRequestType::DealListByPositionIdReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaDealListByPositionIdReq.as_u32(),
         payload: Some(
           ct::ProtoOaDealListByPositionIdReq {
@@ -527,7 +527,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::OrderDetailsReq(req) => ProtoMessage {
+      CTraderRequestType::OrderDetailsReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaOrderDetailsReq.as_u32(),
         payload: Some(
           ct::ProtoOaOrderDetailsReq {
@@ -539,7 +539,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::OrderListByPositionIdReq(req) => ProtoMessage {
+      CTraderRequestType::OrderListByPositionIdReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaOrderListByPositionIdReq.as_u32(),
         payload: Some(
           ct::ProtoOaOrderListByPositionIdReq {
@@ -553,7 +553,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::DealOffsetListReq(req) => ProtoMessage {
+      CTraderRequestType::DealOffsetListReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaDealOffsetListReq.as_u32(),
         payload: Some(
           ct::ProtoOaDealOffsetListReq {
@@ -565,7 +565,7 @@ impl Into<ProtoMessage> for CTraderRequestType {
         ),
         client_msg_id: req.client_msg_id,
       },
-      Self::GetPositionUnrealizedPnLReq(req) => ProtoMessage {
+      CTraderRequestType::GetPositionUnrealizedPnLReq(req) => ProtoMessage {
         payload_type: ct::ProtoOaPayloadType::ProtoOaGetPositionUnrealizedPnlReq.as_u32(),
         payload: Some(
           ct::ProtoOaGetPositionUnrealizedPnLReq {

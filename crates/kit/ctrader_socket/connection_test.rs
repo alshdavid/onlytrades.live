@@ -51,7 +51,7 @@ async fn should_authenticate() -> anyhow::Result<()> {
 
   let (tx_application_auth, mut rx_application_auth) = unbounded_channel::<()>();
   let (tx_account_auth, mut rx_account_auth) = unbounded_channel::<()>();
-  let (tx_reconcile, mut rx_reconcile) = unbounded_channel::<Box<ReconcileRes>>();
+  let (tx_reconcile, mut rx_reconcile) = unbounded_channel::<ReconcileRes>();
 
   tokio::task::spawn({
     let mut rx = connection.subscribe().await;
@@ -88,37 +88,33 @@ async fn should_authenticate() -> anyhow::Result<()> {
   });
 
   connection
-    .send(crate::CTraderRequestType::ApplicationAuthReq(Box::new(
+    .send(crate::CTraderRequestType::ApplicationAuthReq(
       ApplicationAuthReq {
         client_msg_id: Some("1".to_string()),
         client_id: env.ctrader_client_id.clone(),
         client_secret: env.ctrader_client_secret.clone(),
       },
-    )))
+    ))
     .await?;
 
   rx_application_auth.recv().await;
 
   connection
-    .send(crate::CTraderRequestType::AccountAuthReq(Box::new(
-      AccountAuthReq {
-        client_msg_id: Some("2".to_string()),
-        ctid_trader_account_id: env.ctrader_account_id.clone(),
-        access_token: env.ctrader_access_token.clone(),
-      },
-    )))
+    .send(crate::CTraderRequestType::AccountAuthReq(AccountAuthReq {
+      client_msg_id: Some("2".to_string()),
+      ctid_trader_account_id: env.ctrader_account_id.clone(),
+      access_token: env.ctrader_access_token.clone(),
+    }))
     .await?;
 
   rx_account_auth.recv().await;
 
   connection
-    .send(crate::CTraderRequestType::ReconcileReq(Box::new(
-      ReconcileReq {
-        client_msg_id: Some("3".to_string()),
-        ctid_trader_account_id: env.ctrader_account_id.clone(),
-        return_protection_orders: None,
-      },
-    )))
+    .send(crate::CTraderRequestType::ReconcileReq(ReconcileReq {
+      client_msg_id: Some("3".to_string()),
+      ctid_trader_account_id: env.ctrader_account_id.clone(),
+      return_protection_orders: None,
+    }))
     .await?;
 
   let reconcile_res = rx_reconcile.recv().await;

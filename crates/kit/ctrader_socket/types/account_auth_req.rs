@@ -20,12 +20,12 @@ impl From<ProtoOaAccountAuthReq> for AccountAuthReq {
   }
 }
 
-impl Into<ProtoOaAccountAuthReq> for AccountAuthReq {
-  fn into(self) -> ProtoOaAccountAuthReq {
+impl From<AccountAuthReq> for ProtoOaAccountAuthReq {
+  fn from(val: AccountAuthReq) -> Self {
     ProtoOaAccountAuthReq {
       payload_type: None,
-      ctid_trader_account_id: self.ctid_trader_account_id,
-      access_token: self.access_token,
+      ctid_trader_account_id: val.ctid_trader_account_id,
+      access_token: val.access_token,
     }
   }
 }
