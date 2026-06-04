@@ -9,7 +9,7 @@ set -e
 # 1) Install protoc
 # 2) Run "cargo install protoc-gen-prost"
 
-rm -rf ./lib.rs
+rm -rf ./generated.rs
 rm -rf ./openapi-proto-messages
 
 mkdir -p ./openapi-proto-messages
@@ -24,5 +24,5 @@ protoc --plugin=protoc-gen-prost=$(which protoc-gen-prost) \
   openapi-proto-messages/*.proto
 
 
-mv ./_ ./lib.rs
+mv ./_ ./generated.rs
 cargo xfmt
