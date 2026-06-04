@@ -78,7 +78,7 @@ jobs:
           retention-days: 1
 
   github_release:
-    runs_on: ubuntu-22.04
+    runs-on: ubuntu-22.04
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
