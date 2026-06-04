@@ -9,7 +9,8 @@ set -e
 # 1) Install protoc
 # 2) Run "cargo install protoc-gen-prost"
 
-rm -rf ./lib.rs ./openapi-proto-messages
+rm -rf ./lib.rs
+rm -rf ./openapi-proto-messages
 
 mkdir -p ./openapi-proto-messages
 curl -L https://github.com/spotware/openapi-proto-messages/archive/refs/heads/main.tar.gz | tar -xzf - --strip-components=1 -C ./openapi-proto-messages
@@ -17,7 +18,11 @@ curl -L https://github.com/spotware/openapi-proto-messages/archive/refs/heads/ma
 protoc --plugin=protoc-gen-prost=$(which protoc-gen-prost) \
   --proto_path=openapi-proto-messages \
   --prost_out=. \
+  --prost_opt=compile_well_known_types \
+  --prost_opt=type_attribute=.='#[derive(::serde::Serialize)]' \
+  --prost_opt=type_attribute=.='#[derive(::serde::Deserialize)]' \
   openapi-proto-messages/*.proto
+
 
 mv ./_ ./lib.rs
 cargo xfmt
