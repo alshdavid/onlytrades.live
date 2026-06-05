@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaSubscribeSpotsReq;
 
 /// * Request for subscribing on spot events of the specified symbol. After successful subscription you'll receive technical ProtoOASpotEvent with latest price, after which you'll start receiving updates on prices via consequent ProtoOASpotEvents.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct SubscribeSpotsReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

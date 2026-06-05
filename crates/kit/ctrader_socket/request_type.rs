@@ -1,10 +1,13 @@
 use kit_ctrader_proto::ProtoMessage;
 use kit_ctrader_proto::{self as ct};
 use prost::Message;
+use serde::Deserialize;
+use serde::Serialize;
 
 use super::types;
 use crate::connection_proto::PayloadTypeExt;
 
+#[derive(Debug, Serialize, Deserialize)]
 pub enum CTraderRequestType {
   ApplicationAuthReq(types::ApplicationAuthReq),
   AccountAuthReq(types::AccountAuthReq),

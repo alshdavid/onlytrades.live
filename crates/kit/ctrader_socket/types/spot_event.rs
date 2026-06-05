@@ -3,7 +3,7 @@ use serde::Serialize;
 
 use super::Trendbar;
 
-#[derive(Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SpotEvent {
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
   pub ctid_trader_account_id: i64,

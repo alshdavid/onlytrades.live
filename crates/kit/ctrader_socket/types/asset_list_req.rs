@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaAssetListReq;
 
 /// * Request for the list of assets available for a trader's account.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct AssetListReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

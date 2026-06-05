@@ -3,7 +3,7 @@ use kit_ctrader_proto::ProtoOaGetPositionUnrealizedPnLRes;
 use super::PositionUnrealizedPnL;
 
 /// * Response to ProtoOAGetPositionUnrealizedPnLReq request.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct GetPositionUnrealizedPnLRes {
   pub client_msg_id: Option<String>,
   /// The unique identifier of the trader's account in cTrader platform.

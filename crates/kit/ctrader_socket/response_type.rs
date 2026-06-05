@@ -1,9 +1,12 @@
 use kit_ctrader_proto::{self as ct};
+use serde::Deserialize;
+use serde::Serialize;
 
 use super::types;
 use crate::connection_proto::ProtoError;
 use crate::connection_proto::ProtoMessageParse;
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum CTraderResponseType {
   ExecutionEvent(Box<types::ExecutionEvent>),
   ReconcileRes(types::ReconcileRes),

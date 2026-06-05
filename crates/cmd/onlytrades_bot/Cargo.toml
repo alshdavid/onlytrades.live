@@ -14,4 +14,9 @@ path = "./lib.rs"
 [dependencies]
 onlytrades_macros = { workspace = true }
 kit_ctrader = { workspace = true }
+kit_ctrader_socket = { workspace = true }
+
+thiserror = { workspace = true }
 tokio = { workspace = true, features = ["rt"] }
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }

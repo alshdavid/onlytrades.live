@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaVersionRes;
 
 /// * Response to the ProtoOAVersionReq request.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct VersionRes {
   pub client_msg_id: Option<String>,
   /// The current version of the server application.

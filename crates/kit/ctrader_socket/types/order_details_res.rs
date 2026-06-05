@@ -4,7 +4,7 @@ use super::Deal;
 use super::Order;
 
 /// * Response to the ProtoOAOrderDetailsReq request.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct OrderDetailsRes {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

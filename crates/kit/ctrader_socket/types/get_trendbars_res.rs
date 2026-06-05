@@ -5,7 +5,7 @@ use super::Trendbar;
 use super::TrendbarPeriod;
 
 /// * Response to the ProtoOAGetTrendbarsReq request.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct GetTrendbarsRes {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

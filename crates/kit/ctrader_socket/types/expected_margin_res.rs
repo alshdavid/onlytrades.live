@@ -3,7 +3,7 @@ use kit_ctrader_proto::ProtoOaExpectedMarginRes;
 use super::ExpectedMargin;
 
 /// * The response to the ProtoOAExpectedMarginReq request.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct ExpectedMarginRes {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

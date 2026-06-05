@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaAccountLogoutRes;
 
 /// * Response to the ProtoOAAccountLogoutReq request. Actual logout of trading account will be completed on ProtoOAAccountDisconnectEvent.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct AccountLogoutRes {
   pub client_msg_id: Option<String>,
   /// The unique identifier of the trader's account in cTrader platform.

@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaExpectedMarginReq;
 
 /// * Request for getting the margin estimate according to leverage profiles. Can be used before sending a new order request. This doesn't consider ACCORDING_TO_GSL margin calculation type, as this calculation is trivial: usedMargin = (VWAP price of the position - GSL price) * volume * Quote2Deposit.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct ExpectedMarginReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

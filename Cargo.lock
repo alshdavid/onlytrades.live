@@ -2116,6 +2116,7 @@ dependencies = [
  "onlytrades_compress",
  "onlytrades_ctrader",
  "onlytrades_ctrader_service",
+ "onlytrades_ctrader_socket",
  "onlytrades_data_view_turso",
  "onlytrades_hash",
  "onlytrades_log_service",
@@ -2167,7 +2168,11 @@ name = "onlytrades_bot"
 version = "0.0.0-local"
 dependencies = [
  "onlytrades_ctrader",
+ "onlytrades_ctrader_socket",
  "onlytrades_macros",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.18",
  "tokio",
 ]
 
@@ -2178,12 +2183,16 @@ dependencies = [
  "anyhow",
  "chrono",
  "dashmap",
+ "onlytrades_ctrader_rest",
  "onlytrades_ctrader_service",
+ "onlytrades_ctrader_socket",
  "onlytrades_log_service",
  "onlytrades_models",
  "onlytrades_plugins",
  "onlytrades_process",
  "onlytrades_repository_turso",
+ "serde",
+ "serde_json",
  "tokio",
  "uuid",
 ]
@@ -2239,6 +2248,7 @@ dependencies = [
  "chrono",
  "onlytrades_ctrader",
  "onlytrades_ctrader_proto",
+ "onlytrades_ctrader_socket",
  "onlytrades_models",
  "onlytrades_repository_turso",
  "tokio",
@@ -2275,6 +2285,7 @@ name = "onlytrades_examples_rust_bot"
 version = "0.0.0-local"
 dependencies = [
  "onlytrades_bot",
+ "tokio",
 ]
 
 [[package]]
@@ -2334,6 +2345,7 @@ name = "onlytrades_process"
 version = "0.0.0-local"
 dependencies = [
  "anyhow",
+ "onlytrades_hash",
  "serde",
  "serde_json",
  "sysinfo",

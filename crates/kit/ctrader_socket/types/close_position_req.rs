@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaClosePositionReq;
 
 /// * Request for closing or partially closing of an existing position. Allowed only if the accessToken has "trade" permissions for the trading account.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct ClosePositionReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

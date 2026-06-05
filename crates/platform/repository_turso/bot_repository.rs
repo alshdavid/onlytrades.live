@@ -18,7 +18,6 @@ impl BotRepository {
   }
 
   pub async fn init(&self) -> anyhow::Result<()> {
-    // Fixed the trailing comma syntax error right after the FOREIGN KEY constraint
     let sql = r#"
       CREATE TABLE IF NOT EXISTS bots (
         id                  TEXT      PRIMARY KEY,

@@ -1,25 +1,27 @@
-pub use kit_ctrader::sockets::types;
+mod context;
+mod error;
+
+pub use kit_ctrader_socket::CTraderRequestType;
+pub use kit_ctrader_socket::CTraderResponseType;
+pub use kit_ctrader_socket::types::*;
 pub use onlytrades_macros::*;
-use tokio::sync::mpsc::UnboundedReceiver;
+
+pub use self::context::*;
+pub use self::error::*;
 
 pub fn bootstrap<F, Fut, R>(func: F) -> R
 where
   F: 'static + Fn(Context) -> Fut,
   Fut: 'static + Future<Output = R>,
 {
-  let ctx = Context {};
-
-  tokio::runtime::Builder::new_current_thread()
-    .enable_all()
-    .build()
+  tokio::runtime::LocalRuntime::new()
     .expect("Failed to build the runtime")
-    .block_on(func(ctx))
-}
+    .block_on(async move {
+      let ctx = Context::new()
+        .await
+        // This must connect or exit the process
+        .unwrap();
 
-pub struct Context {}
-
-impl Context {
-  pub fn subscribe(&self) -> UnboundedReceiver<()> {
-    todo!()
-  }
+      func(ctx).await
+    })
 }

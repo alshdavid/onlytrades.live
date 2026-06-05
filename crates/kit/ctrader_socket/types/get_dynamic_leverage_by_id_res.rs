@@ -3,7 +3,7 @@ use kit_ctrader_proto::ProtoOaGetDynamicLeverageByIdRes;
 use super::DynamicLeverage;
 
 /// * Response to the ProtoOAGetDynamicLeverageByIDReq request.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct GetDynamicLeverageByIdRes {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

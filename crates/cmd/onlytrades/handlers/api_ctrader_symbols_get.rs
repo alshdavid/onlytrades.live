@@ -29,17 +29,18 @@ pub async fn api_ctrader_symbols_get(
     return Ok(());
   };
 
-  let connection_name = format!("{}:{}", profile.id, account_id);
-  let symbols = ctrader_service
-    .symbols_list(&connection_name, &profile.id, &account_id)
-    .await?;
+  todo!();
+  // let connection_name = format!("{}:{}", profile.id, account_id);
+  // let symbols = ctrader_service
+  //   .symbols_list(&connection_name, &profile.id, &account_id)
+  //   .await?;
 
-  let mut symbols = symbols.into_keys().collect::<Vec<String>>();
-  symbols.sort();
+  // let mut symbols = symbols.into_keys().collect::<Vec<String>>();
+  // symbols.sort();
 
-  let body = serde_json::to_vec(&symbols)?;
-  res.write_all(&body).await?;
-  res.header().add("Content-Type", "application/json").await?;
-  res.write_head(StatusCode::OK).await?;
-  Ok(())
+  // let body = serde_json::to_vec(&symbols)?;
+  // res.write_all(&body).await?;
+  // res.header().add("Content-Type", "application/json").await?;
+  // res.write_head(StatusCode::OK).await?;
+  // Ok(())
 }

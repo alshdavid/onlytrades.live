@@ -4,7 +4,7 @@ use num_enum::TryFromPrimitive;
 use super::TrendbarPeriod;
 
 /// * Request for getting historical trend bars for the symbol.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct GetTrendbarsReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

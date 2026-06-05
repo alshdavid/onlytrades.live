@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaAccountAuthReq;
 
 /// * Request for authorizing of the trading account session. Requires established authorized connection with the client application using ProtoOAApplicationAuthReq.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct AccountAuthReq {
   pub client_msg_id: Option<String>,
   /// The unique identifier of the trader's account in cTrader platform.

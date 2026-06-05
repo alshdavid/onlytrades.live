@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaGetPositionUnrealizedPnLReq;
 
 /// * Request for getting trader's positions' unrealized PnLs.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct GetPositionUnrealizedPnLReq {
   pub client_msg_id: Option<String>,
   /// The unique identifier of the trader's account in cTrader platform.

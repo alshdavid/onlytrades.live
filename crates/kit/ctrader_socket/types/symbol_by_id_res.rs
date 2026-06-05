@@ -4,7 +4,7 @@ use super::ArchivedSymbol;
 use super::Symbol;
 
 /// * Response to the ProtoOASymbolByIdReq request.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct SymbolByIdRes {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

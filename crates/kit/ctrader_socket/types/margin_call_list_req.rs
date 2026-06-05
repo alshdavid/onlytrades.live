@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaMarginCallListReq;
 
 /// * Request for a list of existing margin call thresholds configured for a user.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct MarginCallListReq {
   pub client_msg_id: Option<String>,
   pub ctid_trader_account_id: i64,

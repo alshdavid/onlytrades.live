@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaRefreshTokenReq;
 
 /// * Request to refresh the access token using refresh token of granted trader's account.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct RefreshTokenReq {
   pub client_msg_id: Option<String>,
   /// The Refresh Token issued for updating Access Token.

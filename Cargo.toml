@@ -37,6 +37,7 @@ kit_compress = { package = "onlytrades_compress", path = "./crates/kit/compress"
 kit_ctrader = { package = "onlytrades_ctrader", path = "./crates/kit/ctrader" }
 kit_ctrader_proto = { package = "onlytrades_ctrader_proto", path = "./crates/kit/ctrader_proto" }
 kit_ctrader_rest = { package = "onlytrades_ctrader_rest", path = "./crates/kit/ctrader_rest" }
+kit_ctrader_socket = { package = "onlytrades_ctrader_socket", path = "./crates/kit/ctrader_socket" }
 kit_hash = { package = "onlytrades_hash", path = "./crates/kit/hash" }
 kit_std_ext = { package = "onlytrades_std_ext", path = "./crates/kit/std_ext" }
 kit_turso = { package = "onlytrades_turso", path = "./crates/kit/turso" }
@@ -65,12 +66,14 @@ proc-macro2 = "1"
 prost = "0.14"
 quote = "1"
 reqwest = "0.13"
+rkyv = "0.8"
 serde = "1"
 serde_json = "1"
 serde_urlencoded = "0.7"
 sha2 = "0.11"
 syn = "2"
 sysinfo = "0.39"
+tempfile = "3"
 thiserror = "2"
 tokio = "1"
 tokio-native-tls = "0.3"

@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaUnsubscribeDepthQuotesReq;
 
 /// * Request for unsubscribing from the depth of market of the specified symbol.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct UnsubscribeDepthQuotesReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

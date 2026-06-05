@@ -3,7 +3,7 @@ use kit_ctrader_proto::ProtoOaMarginCallListRes;
 use super::MarginCall;
 
 /// * Response with a list of existing user Margin Calls, usually contains 3 items.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct MarginCallListRes {
   pub client_msg_id: Option<String>,
   pub margin_call: Vec<MarginCall>,

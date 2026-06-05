@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaReconcileReq;
 
 /// * Request for getting Trader's current open positions and pending orders data.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct ReconcileReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

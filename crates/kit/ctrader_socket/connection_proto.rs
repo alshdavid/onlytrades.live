@@ -7,6 +7,8 @@ use kit_ctrader_proto::ProtoMessage;
 use kit_ctrader_proto::ProtoOaPayloadType;
 use kit_ctrader_proto::ProtoPayloadType;
 use prost::Message;
+use serde::Deserialize;
+use serde::Serialize;
 use thiserror::Error;
 use tokio::io::AsyncReadExt;
 use tokio::io::AsyncWriteExt;
@@ -134,7 +136,7 @@ impl CTraderConnectionRaw {
     &self,
     msg: ProtoMessage,
   ) -> std::result::Result<(), ProtoError> {
-    // println!("-> {} [{:?}]", msg.payload_type, msg.client_msg_id);
+    println!("-> {} [{:?}]", msg.payload_type, msg.client_msg_id);
 
     let encoded = msg.encode_to_vec();
     let frame = add_be_header(encoded);
@@ -164,12 +166,12 @@ fn add_be_header(payload: Vec<u8>) -> Vec<u8> {
   result
 }
 
-#[derive(Debug, Error)]
+#[derive(Debug, Clone, Error, Serialize, Deserialize)]
 pub enum ProtoError {
   #[error("The protocol message contains no body: [{0:?}]")]
   NoBody(Option<String>),
   #[error("Failed to parse the protocol message body: {0}")]
-  CannotParseBody(#[from] prost::DecodeError),
+  CannotParseBody(String),
   #[error("Failed to write to the socket")]
   SocketWriterError,
   #[error("Failed to flush the socket")]
@@ -193,7 +195,7 @@ impl ProtoMessageParse for ProtoMessage {
 
     match R::decode(body_bytes.as_slice()) {
       Ok(result) => Ok(result),
-      Err(error) => Err(ProtoError::CannotParseBody(error)),
+      Err(error) => Err(ProtoError::CannotParseBody(error.to_string())),
     }
   }
 

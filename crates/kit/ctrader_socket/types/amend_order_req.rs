@@ -4,7 +4,7 @@ use num_enum::TryFromPrimitive;
 use super::OrderTriggerMethod;
 
 /// * Request for amending the existing pending order. Allowed only if the Access Token has "trade" permissions for the trading account.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct AmendOrderReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

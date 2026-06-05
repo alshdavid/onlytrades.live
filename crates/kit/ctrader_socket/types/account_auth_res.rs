@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaAccountAuthRes;
 
 /// * Response to the ProtoOAApplicationAuthRes request.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct AccountAuthRes {
   pub client_msg_id: Option<String>,
   /// The unique identifier of the trader's account in cTrader platform.

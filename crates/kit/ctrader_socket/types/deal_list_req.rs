@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaDealListReq;
 
 /// * Request for getting Trader's deals historical data (execution details).
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct DealListReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

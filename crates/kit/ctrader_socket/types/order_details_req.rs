@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaOrderDetailsReq;
 
 /// * Request for getting Order and its related Deals.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct OrderDetailsReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaApplicationAuthRes;
 
 /// * Response to the ProtoOAApplicationAuthReq request.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct ApplicationAuthRes {
   pub client_msg_id: Option<String>,
 }

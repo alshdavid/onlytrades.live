@@ -4,7 +4,7 @@ use super::ArchivedSymbol;
 use super::LightSymbol;
 
 /// * Response to the ProtoOASymbolsListReq request.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct SymbolsListRes {
   pub client_msg_id: Option<String>,
   pub ctid_trader_account_id: i64,

@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaGetAccountListByAccessTokenReq;
 
 /// * Request for getting the list of granted trader's account for the access token.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct GetAccountListByAccessTokenReq {
   pub client_msg_id: Option<String>,
   /// The Access Token issued for providing access to the Trader's Account.

@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaApplicationAuthReq;
 
 /// * Request for the authorizing an application to work with the cTrader platform Proxies.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, serde::Serialize, serde::Deserialize, Clone, PartialEq)]
 pub struct ApplicationAuthReq {
   pub client_msg_id: Option<String>,
   /// The unique Client ID provided during the registration.

@@ -7,7 +7,7 @@ use super::TimeInForce;
 use super::TradeSide;
 
 /// * Request for sending a new trading order. Allowed only if the accessToken has the "trade" permissions for the trading account.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct NewOrderReq {
   pub client_msg_id: Option<String>,
   /// The unique identifier of the trader's account in cTrader platform.

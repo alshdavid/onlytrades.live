@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaDealOffsetListReq;
 
 /// * Request for getting sets of Deals that were offset by a specific Deal and that are offsetting the Deal.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct DealOffsetListReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

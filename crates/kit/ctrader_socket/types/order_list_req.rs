@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaOrderListReq;
 
 /// * Request for getting Trader's orders filtered by timestamp
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct OrderListReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

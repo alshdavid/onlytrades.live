@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaSymbolsForConversionReq;
 
 /// * Request for getting a conversion chain between two assets that consists of several symbols. Use when no direct quote is available.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct SymbolsForConversionReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.

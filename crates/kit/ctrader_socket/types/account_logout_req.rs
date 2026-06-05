@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaAccountLogoutReq;
 
 /// * Request for logout of trading account session.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct AccountLogoutReq {
   pub client_msg_id: Option<String>,
   /// The unique identifier of the trader's account in cTrader platform.

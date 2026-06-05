@@ -1,7 +1,7 @@
 use kit_ctrader_proto::ProtoOaSymbolsListReq;
 
 /// * Request for a list of symbols available for a trading account. Symbol entries are returned with the limited set of fields.
-#[derive(::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct SymbolsListReq {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
