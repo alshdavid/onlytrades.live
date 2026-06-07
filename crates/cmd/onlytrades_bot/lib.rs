@@ -5,7 +5,7 @@ pub use kit_ctrader_socket::CTraderRequestType;
 pub use kit_ctrader_socket::CTraderResponseType;
 pub use kit_ctrader_socket::connection::CTraderConnectionExt;
 pub use kit_ctrader_socket::types::*;
-pub use kit_ctrader_socket::utils::CTraderConnectableExt;
+pub use kit_ctrader_socket::utils::CTraderConnectionUtils;
 pub use onlytrades_macros::*;
 
 pub use self::context::*;

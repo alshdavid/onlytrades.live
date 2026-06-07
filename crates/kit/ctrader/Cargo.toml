@@ -12,14 +12,5 @@ path = "./lib.rs"
 
 [dependencies]
 kit_ctrader_proto = { workspace = true }
-
-anyhow = { workspace = true }
-chrono = { workspace = true, features = ["serde"] }
-dashmap = { workspace = true }
-num_enum = { workspace = true }
-prost = { workspace = true }
-reqwest = { workspace = true, features = ["json"] }
-serde = { workspace = true, features = ["derive"] }
-thiserror = { workspace = true }
-tokio = { workspace = true, features = ["full"] }
-tokio-native-tls = { workspace = true }
+kit_ctrader_rest = { workspace = true }
+kit_ctrader_socket = { workspace = true }

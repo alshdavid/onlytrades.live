@@ -2211,17 +2211,9 @@ dependencies = [
 name = "onlytrades_ctrader"
 version = "0.0.0-local"
 dependencies = [
- "anyhow",
- "chrono",
- "dashmap",
- "num_enum",
  "onlytrades_ctrader_proto",
- "prost 0.14.3",
- "reqwest",
- "serde",
- "thiserror 2.0.18",
- "tokio",
- "tokio-native-tls",
+ "onlytrades_ctrader_rest",
+ "onlytrades_ctrader_socket",
 ]
 
 [[package]]

@@ -117,7 +117,7 @@ async fn main() -> anyhow::Result<()> {
 
   bot::handler(conn, account_id).await?;
 
-  tokio::time::sleep(Duration::from_secs(100)).await;
+  tokio::time::sleep(Duration::from_secs(1000)).await;
 
   // let ctrader_service = Arc::new(CTraderService::new(
   //   &env.app_origin,

@@ -33,6 +33,7 @@ pub struct CTraderConnectionRawOptions {
   pub live: bool,
 }
 
+#[derive(Clone, Debug)]
 pub struct CTraderConnectionRaw {
   listeners: Arc<Mutex<Vec<UnboundedSender<ProtoMessage>>>>,
   writer: Arc<Mutex<WriteHalf<TlsStream<TcpStream>>>>,

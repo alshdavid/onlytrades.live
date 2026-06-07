@@ -10,7 +10,7 @@ use crate::CTraderResponseType;
 use crate::LightSymbol;
 use crate::connection::CTraderConnectionExt;
 
-pub trait CTraderConnectableExt {
+pub trait CTraderConnectionUtils {
   fn get_symbol_list(
     &self,
     account_id: i64,
@@ -28,14 +28,14 @@ pub trait CTraderConnectableExt {
   ) -> impl Future<Output = anyhow::Result<()>>;
   fn get_historical_trendbars(
     &self,
-    account_id: i64,
-    symbol_id: i64,
+    account_id: &i64,
+    symbol_id: &i64,
     period: TrendbarPeriod,
     count: u32,
   ) -> impl Future<Output = anyhow::Result<Vec<Trendbar>>>;
 }
 
-impl<T: CTraderConnectionExt> CTraderConnectableExt for T {
+impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
   fn get_symbol_list(
     &self,
     account_id: i64,
@@ -185,8 +185,8 @@ impl<T: CTraderConnectionExt> CTraderConnectableExt for T {
 
   fn get_historical_trendbars(
     &self,
-    account_id: i64,
-    symbol_id: i64,
+    account_id: &i64,
+    symbol_id: &i64,
     period: TrendbarPeriod,
     count: u32,
   ) -> impl Future<Output = anyhow::Result<Vec<Trendbar>>> {
@@ -216,11 +216,11 @@ impl<T: CTraderConnectionExt> CTraderConnectableExt for T {
       self
         .send(CTraderRequestType::GetTrendbarsReq(GetTrendbarsReq {
           client_msg_id: Some(id),
-          ctid_trader_account_id: account_id,
+          ctid_trader_account_id: *account_id,
           from_timestamp: None,
           to_timestamp: None,
-          period,
-          symbol_id,
+          period: period,
+          symbol_id: *symbol_id,
           count: Some(count),
         }))
         .await?;

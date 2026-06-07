@@ -1,3 +1,4 @@
+use std::sync::Arc;
 use std::time::SystemTime;
 use std::time::UNIX_EPOCH;
 
@@ -16,8 +17,9 @@ pub struct CTraderConnectionOptions {
   pub live: bool,
 }
 
+#[derive(Clone, Debug)]
 pub struct CTraderConnection {
-  conn: CTraderConnectionRaw,
+  conn: Arc<CTraderConnectionRaw>,
 }
 
 impl CTraderConnection {
@@ -25,7 +27,7 @@ impl CTraderConnection {
     let conn =
       CTraderConnectionRaw::connect(CTraderConnectionRawOptions { live: options.live }).await?;
 
-    Ok(Self { conn })
+    Ok(Self { conn: Arc::new(conn) })
   }
 }
 

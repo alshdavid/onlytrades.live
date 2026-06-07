@@ -1,4 +1,4 @@
-use onlytrades_bot::CTraderConnectableExt;
+use onlytrades_bot::CTraderConnectionUtils;
 use onlytrades_bot::CTraderConnectionExt;
 use onlytrades_bot::CTraderRequestType;
 use onlytrades_bot::CTraderResponseType;

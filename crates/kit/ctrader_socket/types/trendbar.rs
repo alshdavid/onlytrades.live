@@ -34,9 +34,29 @@ impl From<kit_ctrader_proto::ProtoOaTrendbar> for Trendbar {
 }
 
 impl Trendbar {
-  pub fn close_price(&self) -> f64 {
-    let low = self.low.unwrap_or(0) as f64;
-    let delta = self.delta_close.unwrap_or(0) as f64;
-    (low + delta) / 100_000.0
-  }
+  /// Returns the absolute opening price as a raw i64 integer.
+    pub fn open_price(&self) -> i64 {
+        let low = self.low.unwrap_or(0);
+        let delta = self.delta_open.unwrap_or(0) as i64;
+        low + delta
+    }
+
+    /// Returns the absolute highest price as a raw i64 integer.
+    pub fn high_price(&self) -> i64 {
+        let low = self.low.unwrap_or(0);
+        let delta = self.delta_high.unwrap_or(0) as i64;
+        low + delta
+    }
+
+    /// Returns the absolute lowest price as a raw i64 integer.
+    pub fn low_price(&self) -> i64 {
+        self.low.unwrap_or(0)
+    }
+
+    /// Returns the absolute closing price as a raw i64 integer.
+    pub fn close_price(&self) -> i64 {
+        let low = self.low.unwrap_or(0);
+        let delta = self.delta_close.unwrap_or(0) as i64;
+        low + delta
+    }
 }
