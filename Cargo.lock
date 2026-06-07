@@ -2115,6 +2115,8 @@ dependencies = [
  "onlytrades_bot_service",
  "onlytrades_compress",
  "onlytrades_ctrader",
+ "onlytrades_ctrader_proto",
+ "onlytrades_ctrader_rest",
  "onlytrades_ctrader_service",
  "onlytrades_ctrader_socket",
  "onlytrades_data_view_turso",
@@ -2248,6 +2250,7 @@ dependencies = [
  "chrono",
  "onlytrades_ctrader",
  "onlytrades_ctrader_proto",
+ "onlytrades_ctrader_rest",
  "onlytrades_ctrader_socket",
  "onlytrades_models",
  "onlytrades_repository_turso",
@@ -2267,6 +2270,7 @@ dependencies = [
  "thiserror 2.0.18",
  "tokio",
  "tokio-native-tls",
+ "uuid",
 ]
 
 [[package]]
@@ -2284,6 +2288,7 @@ dependencies = [
 name = "onlytrades_examples_rust_bot"
 version = "0.0.0-local"
 dependencies = [
+ "anyhow",
  "onlytrades_bot",
  "tokio",
 ]

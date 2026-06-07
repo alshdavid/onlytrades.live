@@ -13,4 +13,5 @@ path = "./main.rs"
 
 [dependencies]
 onlytrades_bot = { workspace = true }
+anyhow = { workspace = true }
 tokio = { workspace = true, features = [] }

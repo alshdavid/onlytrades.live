@@ -1,7 +1,11 @@
 use std::sync::Arc;
+use std::time::SystemTime;
+use std::time::UNIX_EPOCH;
 
 use kit_ctrader_socket::CTraderRequestType;
 use kit_ctrader_socket::CTraderResponseType;
+use kit_ctrader_socket::VersionReq;
+use kit_ctrader_socket::connection::CTraderConnectionExt;
 use kit_ctrader_socket::connection_proto::ProtoError;
 use tokio::io::AsyncReadExt;
 use tokio::io::AsyncWriteExt;
@@ -52,22 +56,21 @@ impl Context {
     self.account_id
   }
 
-  pub async fn subscribe(
-    &self
-  ) -> UnboundedReceiver<std::result::Result<CTraderResponseType, ProtoError>> {
-    let (tx, rx) = unbounded_channel();
-    self.response_listeners.lock().await.push(tx);
-    rx
-  }
+  // pub async fn subscribe(
+  //   &self
+  // ) -> UnboundedReceiver<std::result::Result<CTraderResponseType, ProtoError>> {
+  //   let (tx, rx) = unbounded_channel();
+  //   self.response_listeners.lock().await.push(tx);
+  //   rx
+  // }
 
-  pub fn send(
-    &self,
-    message: CTraderRequestType,
-  ) -> Result<()> {
-    dbg!(&message);
-    self.tx_requests.send(message)?;
-    Ok(())
-  }
+  // pub fn send(
+  //   &self,
+  //   message: CTraderRequestType,
+  // ) -> Result<()> {
+  //   self.tx_requests.send(message)?;
+  //   Ok(())
+  // }
 
   async fn task_read(
     mut reader: ReadHalf<TcpStream>,
@@ -128,4 +131,37 @@ fn add_be_header(payload: Vec<u8>) -> Vec<u8> {
   result.extend_from_slice(&len.to_be_bytes());
   result.extend_from_slice(&payload);
   result
+}
+
+impl CTraderConnectionExt for Context {
+  fn subscribe(
+    &self
+  ) -> impl std::future::Future<
+    Output = UnboundedReceiver<std::prelude::v1::Result<CTraderResponseType, ProtoError>>,
+  > + Send {
+    async {
+      let (tx, rx) = unbounded_channel();
+      self.response_listeners.lock().await.push(tx);
+      rx
+    }
+  }
+
+  fn send(
+    &self,
+    message: CTraderRequestType,
+  ) -> impl std::future::Future<Output = std::result::Result<(), ProtoError>> + Send {
+    async {
+      if self.tx_requests.send(message).is_err() {
+        return Err(ProtoError::SocketWriterError);
+      }
+      Ok(())
+    }
+  }
+}
+
+fn timestamp() -> std::result::Result<u128, ProtoError> {
+  let Ok(timestamp) = SystemTime::now().duration_since(UNIX_EPOCH) else {
+    return Err(ProtoError::TimeError);
+  };
+  Ok(timestamp.as_millis())
 }

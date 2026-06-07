@@ -20,4 +20,4 @@ serde = { workspace = true, features = ["derive"] }
 thiserror = { workspace = true }
 tokio = { workspace = true, features = ["full"] }
 tokio-native-tls = { workspace = true }
-
+uuid = { workspace = true }

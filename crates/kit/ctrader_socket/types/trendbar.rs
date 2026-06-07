@@ -32,3 +32,11 @@ impl From<kit_ctrader_proto::ProtoOaTrendbar> for Trendbar {
     }
   }
 }
+
+impl Trendbar {
+  pub fn close_price(&self) -> f64 {
+    let low = self.low.unwrap_or(0) as f64;
+    let delta = self.delta_close.unwrap_or(0) as f64;
+    (low + delta) / 100_000.0
+  }
+}

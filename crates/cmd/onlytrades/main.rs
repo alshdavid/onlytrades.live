@@ -2,7 +2,7 @@ mod bot;
 mod client;
 mod ctx;
 mod env;
-mod handlers;
+// mod handlers;
 mod middleware;
 
 use std::collections::HashMap;
@@ -13,8 +13,10 @@ use client::client_manifest;
 use ctx::Ctx;
 use env::Env;
 use kit_auth0::AccessTokenClaims;
-use kit_ctrader::CTraderRestClient;
-use kit_ctrader::CTraderRestClientOptions;
+use kit_ctrader_rest::client::CTraderRestClient;
+use kit_ctrader_rest::client::CTraderRestClientOptions;
+// use kit_ctrader::CTraderRestClient;
+// use kit_ctrader::CTraderRestClientOptions;
 use kit_ctrader_socket::AccountAuthReq;
 use kit_ctrader_socket::ApplicationAuthReq;
 use kit_ctrader_socket::CTraderRequestType;
@@ -23,6 +25,7 @@ use kit_ctrader_socket::connection::CTraderConnectionOptions;
 use kit_std_ext::PathExt;
 use kit_turso::TursoDb;
 use platform_ctrader_service::CTraderService;
+// use platform_ctrader_service::CTraderService;
 use platform_data_view_turso::ProfileDataView;
 use platform_log_service::LogService;
 use platform_models::ProfilePermission;
@@ -110,7 +113,9 @@ async fn main() -> anyhow::Result<()> {
     .new_connection(&profile_id, &account_id)
     .await?;
 
-  // bot::handler(conn, account_id).await?;
+  // println!("latency: {}", conn.latency().await?);
+
+  bot::handler(conn, account_id).await?;
 
   tokio::time::sleep(Duration::from_secs(100)).await;
 

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use kit_auth0::AccessTokenClaims;
-use kit_ctrader::CTraderRestClient;
+use kit_ctrader_rest::client::CTraderRestClient;
 use platform_bot_service::BotService;
 use platform_ctrader_service::CTraderService;
 use platform_data_view_turso::ProfileDataView;

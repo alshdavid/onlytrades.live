@@ -161,10 +161,11 @@ impl CTraderConnectionRaw {
     rx
   }
 
-  pub async fn latency(&self) -> anyhow::Result<u128> {
-    let now_ms = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
+  /// Return the round-trip latency for the socket connection
+  pub async fn latency(&self) -> std::result::Result<u128, ProtoError> {
+    let now_ms = timestamp()?;
 
-    let id = format!("latency::internal::{}", now_ms);
+    let id = format!("::internal::latency::{}::", now_ms);
 
     let message = ProtoMessage {
       payload_type: ProtoOaPayloadType::ProtoOaVersionReq.as_u32(),
@@ -179,14 +180,21 @@ impl CTraderConnectionRaw {
 
     while let Some(msg) = rx.recv().await {
       if msg.payload_type == version_event && msg.client_msg_id.as_ref().is_some_and(|m| m == &id) {
-        let recv_ms = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
-
+        let recv_ms = timestamp()?;
         return Ok(recv_ms - now_ms);
       }
     }
 
-    Err(anyhow::anyhow!("Could not get latency"))
+    // Todo implement timeout
+    Err(ProtoError::SocketTimeout)
   }
+}
+
+fn timestamp() -> std::result::Result<u128, ProtoError> {
+  let Ok(timestamp) = SystemTime::now().duration_since(UNIX_EPOCH) else {
+    return Err(ProtoError::TimeError);
+  };
+  Ok(timestamp.as_millis())
 }
 
 fn add_be_header(payload: Vec<u8>) -> Vec<u8> {
@@ -207,10 +215,14 @@ pub enum ProtoError {
   SocketWriterError,
   #[error("Failed to flush the socket")]
   SocketFlushError,
+  #[error("Socket request timed out")]
+  SocketTimeout,
   #[error("Unknown payload type: [{0:?}] {1}")]
   UnknownPayloadType(Option<String>, i32),
   #[error("Payload parse error: [{0:?}] {1}")]
   PayloadParseError(Option<String>, u32),
+  #[error("Error getting current time")]
+  TimeError,
 }
 
 pub trait ProtoMessageParse {

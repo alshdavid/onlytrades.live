@@ -1,10 +1,10 @@
-#![deny(unused_crate_dependencies)]
+// #![deny(unused_crate_dependencies)]
 mod ctrader_connection_manager;
 mod ctrader_service;
 mod new_order;
 mod symbols_list;
 
-pub use self::ctrader_connection_manager::*;
+// pub use self::ctrader_connection_manager::*;
 // pub use self::ctrader_service::*;
 pub use self::ctrader_service_2::*;
 
@@ -14,12 +14,13 @@ mod ctrader_service_2 {
   use anyhow::Context;
   use chrono::TimeDelta;
   use chrono::Utc;
-  use kit_ctrader::CTraderRestClient;
+  use kit_ctrader_rest::client::CTraderRestClient;
   use kit_ctrader_socket::AccountAuthReq;
   use kit_ctrader_socket::ApplicationAuthReq;
   use kit_ctrader_socket::CTraderRequestType;
   use kit_ctrader_socket::CTraderResponseType;
   use kit_ctrader_socket::connection::CTraderConnection;
+  use kit_ctrader_socket::connection::CTraderConnectionExt;
   use kit_ctrader_socket::connection::CTraderConnectionOptions;
   use platform_models::CtraderTokenModel;
   use platform_repository_turso::CtraderAccountRepository;

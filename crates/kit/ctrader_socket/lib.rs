@@ -5,6 +5,7 @@ mod constants;
 pub mod request_type;
 pub mod response_type;
 pub mod types;
+pub mod utils;
 pub use self::request_type::*;
 pub use self::response_type::*;
 pub use self::types::*;

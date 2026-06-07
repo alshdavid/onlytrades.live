@@ -16,7 +16,9 @@ kit_auth0 = { workspace = true }
 kit_b64 = { workspace = true }
 kit_compress = { workspace = true }
 kit_ctrader = { workspace = true }
+kit_ctrader_rest = { workspace = true }
 kit_ctrader_socket = { workspace = true }
+kit_ctrader_proto = { workspace = true }
 kit_hash = { workspace = true }
 kit_std_ext = { workspace = true }
 kit_turso = { workspace = true }
