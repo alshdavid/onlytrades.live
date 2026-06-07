@@ -184,7 +184,7 @@ where
         // strategy_func(ctx).await?;
       }
       Ok(_) => {}
-      Err(_) => {},
+      Err(_) => {}
     }
   }
 

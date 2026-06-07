@@ -297,9 +297,7 @@ impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
       let (tx, mut rx_done) = unbounded_channel::<anyhow::Result<ExecutionEvent>>();
       let mut rx = self.subscribe().await;
 
-      self
-        .send(CTraderRequestType::NewOrderReq(options))
-        .await?;
+      self.send(CTraderRequestType::NewOrderReq(options)).await?;
 
       tokio::task::spawn({
         async move {
@@ -352,6 +350,6 @@ impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
       });
 
       rx_done.recv().await.context("No ReconcileRes received")?
-     }
+    }
   }
 }
