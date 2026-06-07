@@ -8,6 +8,7 @@ use super::types::*;
 use crate::CTraderRequestType;
 use crate::CTraderResponseType;
 use crate::LightSymbol;
+use crate::NewOrderReq;
 use crate::connection::CTraderConnectionExt;
 
 pub trait CTraderConnectionUtils {
@@ -33,6 +34,20 @@ pub trait CTraderConnectionUtils {
     period: TrendbarPeriod,
     count: u32,
   ) -> impl Future<Output = anyhow::Result<Vec<Trendbar>>>;
+  fn reconcile(
+    &self,
+    account_id: &i64,
+  ) -> impl Future<Output = anyhow::Result<ReconcileRes>>;
+
+  fn new_order(
+    &self,
+    options: NewOrderReq,
+  ) -> impl Future<Output = anyhow::Result<ExecutionEvent>>;
+
+  fn close_position(
+    &self,
+    options: ClosePositionReq,
+  ) -> impl Future<Output = anyhow::Result<ExecutionEvent>>;
 }
 
 impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
@@ -231,5 +246,112 @@ impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
         .context("No GetTrendbarsRes received")??;
       Ok(res.trendbar)
     }
+  }
+
+  fn reconcile(
+    &self,
+    account_id: &i64,
+  ) -> impl Future<Output = anyhow::Result<ReconcileRes>> {
+    async move {
+      let mut rx = self.subscribe().await;
+      let id = Uuid::now_v7().to_string();
+      let (tx, mut rx_done) = unbounded_channel::<anyhow::Result<ReconcileRes>>();
+
+      tokio::task::spawn({
+        let id = id.clone();
+        async move {
+          while let Some(msg) = rx.recv().await {
+            match msg {
+              Ok(CTraderResponseType::ReconcileRes(res)) => {
+                if res.client_msg_id.as_deref() == Some(&id) {
+                  let _ = tx.send(Ok(res));
+                  break;
+                }
+              }
+              Ok(_) => {}
+              Err(_) => break,
+            }
+          }
+        }
+      });
+
+      self
+        .send(CTraderRequestType::ReconcileReq(ReconcileReq {
+          client_msg_id: Some(id),
+          ctid_trader_account_id: *account_id,
+          return_protection_orders: None,
+        }))
+        .await?;
+
+      let res = rx_done.recv().await.context("No ReconcileRes received")??;
+
+      Ok(res)
+    }
+  }
+
+  fn new_order(
+    &self,
+    options: NewOrderReq,
+  ) -> impl Future<Output = anyhow::Result<ExecutionEvent>> {
+    async move {
+      let (tx, mut rx_done) = unbounded_channel::<anyhow::Result<ExecutionEvent>>();
+      let mut rx = self.subscribe().await;
+
+      self
+        .send(CTraderRequestType::NewOrderReq(options))
+        .await?;
+
+      tokio::task::spawn({
+        async move {
+          while let Some(msg) = rx.recv().await {
+            match msg {
+              Ok(CTraderResponseType::ExecutionEvent(res)) => {
+                if res.execution_type == ExecutionType::OrderFilled {
+                  let _ = tx.send(Ok(*res));
+                  break;
+                }
+              }
+              Ok(_) => {}
+              Err(_) => break,
+            }
+          }
+        }
+      });
+
+      rx_done.recv().await.context("No ReconcileRes received")?
+    }
+  }
+
+  fn close_position(
+    &self,
+    options: ClosePositionReq,
+  ) -> impl Future<Output = anyhow::Result<ExecutionEvent>> {
+    async move {
+      let (tx, mut rx_done) = unbounded_channel::<anyhow::Result<ExecutionEvent>>();
+      let mut rx = self.subscribe().await;
+
+      self
+        .send(CTraderRequestType::ClosePositionReq(options))
+        .await?;
+
+      tokio::task::spawn({
+        async move {
+          while let Some(msg) = rx.recv().await {
+            match msg {
+              Ok(CTraderResponseType::ExecutionEvent(res)) => {
+                if res.execution_type == ExecutionType::OrderFilled {
+                  let _ = tx.send(Ok(*res));
+                  break;
+                }
+              }
+              Ok(_) => {}
+              Err(_) => break,
+            }
+          }
+        }
+      });
+
+      rx_done.recv().await.context("No ReconcileRes received")?
+     }
   }
 }

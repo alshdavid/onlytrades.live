@@ -27,7 +27,9 @@ impl CTraderConnection {
     let conn =
       CTraderConnectionRaw::connect(CTraderConnectionRawOptions { live: options.live }).await?;
 
-    Ok(Self { conn: Arc::new(conn) })
+    Ok(Self {
+      conn: Arc::new(conn),
+    })
   }
 }
 

@@ -2255,6 +2255,7 @@ name = "onlytrades_ctrader_socket"
 version = "0.0.0-local"
 dependencies = [
  "anyhow",
+ "chrono",
  "num_enum",
  "onlytrades_ctrader_proto",
  "prost 0.14.3",
@@ -2364,6 +2365,55 @@ dependencies = [
 [[package]]
 name = "onlytrades_std_ext"
 version = "0.0.0-local"
+
+[[package]]
+name = "onlytrades_trader"
+version = "0.0.0-local"
+dependencies = [
+ "anyhow",
+ "base64 0.22.1",
+ "brotli",
+ "chrono",
+ "cookie",
+ "dashmap",
+ "flate2",
+ "include_dir",
+ "jsonwebtoken",
+ "libsql",
+ "num_enum",
+ "onlytrades_auth0",
+ "onlytrades_b64",
+ "onlytrades_bot_service",
+ "onlytrades_compress",
+ "onlytrades_ctrader",
+ "onlytrades_ctrader_proto",
+ "onlytrades_ctrader_rest",
+ "onlytrades_ctrader_service",
+ "onlytrades_ctrader_socket",
+ "onlytrades_data_view_turso",
+ "onlytrades_hash",
+ "onlytrades_log_service",
+ "onlytrades_models",
+ "onlytrades_plugins",
+ "onlytrades_process",
+ "onlytrades_repository_turso",
+ "onlytrades_std_ext",
+ "onlytrades_turso",
+ "prost 0.14.3",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "serde_urlencoded",
+ "sha2 0.11.0",
+ "sysinfo",
+ "ta",
+ "thiserror 2.0.18",
+ "tokio",
+ "tokio-native-tls",
+ "uhttp",
+ "url",
+ "uuid",
+]
 
 [[package]]
 name = "onlytrades_turso"
@@ -3509,6 +3559,12 @@ dependencies = [
  "core-foundation-sys",
  "libc",
 ]
+
+[[package]]
+name = "ta"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "609409d472a0a7d8d4dd9e19891bbdef546b9dce670c3057d0e02192dc541226"
 
 [[package]]
 name = "tempfile"

@@ -23,12 +23,12 @@ pub struct TokenResponse {
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct TradingAccountsResponse {
-  pub data: Vec<TradingAccountsResponseData>,
+  pub data: Vec<TradingAccount>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub struct TradingAccountsResponseData {
+pub struct TradingAccount {
   pub account_id: i64,
   pub account_number: u64,
   pub live: bool,
@@ -111,7 +111,7 @@ impl CTraderRestClient {
   pub async fn get_accounts(
     &self,
     access_token: &str,
-  ) -> anyhow::Result<Vec<TradingAccountsResponseData>> {
+  ) -> anyhow::Result<Vec<TradingAccount>> {
     let client = reqwest::Client::new();
 
     let response = client

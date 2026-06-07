@@ -1,5 +1,5 @@
-use onlytrades_bot::CTraderConnectionUtils;
 use onlytrades_bot::CTraderConnectionExt;
+use onlytrades_bot::CTraderConnectionUtils;
 use onlytrades_bot::CTraderRequestType;
 use onlytrades_bot::CTraderResponseType;
 use onlytrades_bot::Context;

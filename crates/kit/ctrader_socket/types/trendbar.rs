@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde::Serialize;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Trendbar {
   /// Bar volume in ticks.
   pub volume: i64,
@@ -17,6 +17,39 @@ pub struct Trendbar {
   pub delta_high: Option<u64>,
   /// The Unix time in minutes of the bar, equal to the timestamp of the open tick.
   pub utc_timestamp_in_minutes: Option<u32>,
+}
+
+impl std::fmt::Debug for Trendbar {
+  fn fmt(
+    &self,
+    f: &mut std::fmt::Formatter<'_>,
+  ) -> std::fmt::Result {
+    f.debug_struct("Trendbar")
+      .field("volume", &self.volume)
+      .field("period", &self.period)
+      .field("open", &self.open_price())
+      .field("close", &self.close_price())
+      .field("high", &self.high_price())
+      .field("low", &self.low_price())
+      .field("delta_open", &self.delta_open)
+      .field("delta_close", &self.delta_close)
+      .field("delta_high", &self.delta_high)
+      .field("utc_timestamp_in_minutes", &self.utc_timestamp_in_minutes)
+      .field(
+        "time",
+        &self.utc_timestamp_in_minutes.map(|mins| {
+          let secs = mins as i64 * 60;
+          chrono::DateTime::from_timestamp(secs, 0)
+            .map(|dt| {
+              dt.with_timezone(&chrono::Local)
+                .format("%Y-%m-%d %H:%M:%S")
+                .to_string()
+            })
+            .unwrap_or_else(|| "Invalid timestamp".to_string())
+        }),
+      )
+      .finish()
+  }
 }
 
 impl From<kit_ctrader_proto::ProtoOaTrendbar> for Trendbar {
@@ -35,28 +68,28 @@ impl From<kit_ctrader_proto::ProtoOaTrendbar> for Trendbar {
 
 impl Trendbar {
   /// Returns the absolute opening price as a raw i64 integer.
-    pub fn open_price(&self) -> i64 {
-        let low = self.low.unwrap_or(0);
-        let delta = self.delta_open.unwrap_or(0) as i64;
-        low + delta
-    }
+  pub fn open_price(&self) -> i64 {
+    let low = self.low.unwrap_or(0);
+    let delta = self.delta_open.unwrap_or(0) as i64;
+    low + delta
+  }
 
-    /// Returns the absolute highest price as a raw i64 integer.
-    pub fn high_price(&self) -> i64 {
-        let low = self.low.unwrap_or(0);
-        let delta = self.delta_high.unwrap_or(0) as i64;
-        low + delta
-    }
+  /// Returns the absolute highest price as a raw i64 integer.
+  pub fn high_price(&self) -> i64 {
+    let low = self.low.unwrap_or(0);
+    let delta = self.delta_high.unwrap_or(0) as i64;
+    low + delta
+  }
 
-    /// Returns the absolute lowest price as a raw i64 integer.
-    pub fn low_price(&self) -> i64 {
-        self.low.unwrap_or(0)
-    }
+  /// Returns the absolute lowest price as a raw i64 integer.
+  pub fn low_price(&self) -> i64 {
+    self.low.unwrap_or(0)
+  }
 
-    /// Returns the absolute closing price as a raw i64 integer.
-    pub fn close_price(&self) -> i64 {
-        let low = self.low.unwrap_or(0);
-        let delta = self.delta_close.unwrap_or(0) as i64;
-        low + delta
-    }
+  /// Returns the absolute closing price as a raw i64 integer.
+  pub fn close_price(&self) -> i64 {
+    let low = self.low.unwrap_or(0);
+    let delta = self.delta_close.unwrap_or(0) as i64;
+    low + delta
+  }
 }
