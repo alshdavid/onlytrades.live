@@ -16,7 +16,8 @@ use tokio::sync::mpsc::unbounded_channel;
 use super::Result;
 
 pub struct Context {
-  response_listeners: Arc<Mutex<Vec<UnboundedSender<std::result::Result<CTraderResponseType, ProtoError>>>>>,
+  response_listeners:
+    Arc<Mutex<Vec<UnboundedSender<std::result::Result<CTraderResponseType, ProtoError>>>>>,
   tx_requests: UnboundedSender<CTraderRequestType>,
   account_id: i64,
 }
@@ -51,7 +52,9 @@ impl Context {
     self.account_id
   }
 
-  pub async fn subscribe(&self) -> UnboundedReceiver<std::result::Result<CTraderResponseType, ProtoError>> {
+  pub async fn subscribe(
+    &self
+  ) -> UnboundedReceiver<std::result::Result<CTraderResponseType, ProtoError>> {
     let (tx, rx) = unbounded_channel();
     self.response_listeners.lock().await.push(tx);
     rx
@@ -68,7 +71,9 @@ impl Context {
 
   async fn task_read(
     mut reader: ReadHalf<TcpStream>,
-    response_listeners: Arc<Mutex<Vec<UnboundedSender<std::result::Result<CTraderResponseType, ProtoError>>>>>,
+    response_listeners: Arc<
+      Mutex<Vec<UnboundedSender<std::result::Result<CTraderResponseType, ProtoError>>>>,
+    >,
   ) -> Result<()> {
     loop {
       let mut header_buf = [0u8; 4];
@@ -92,7 +97,9 @@ impl Context {
       };
 
       // TODO: rkyv
-      let result = serde_json::from_slice::<std::result::Result<CTraderResponseType, ProtoError>>(body_buf.as_slice())?;
+      let result = serde_json::from_slice::<std::result::Result<CTraderResponseType, ProtoError>>(
+        body_buf.as_slice(),
+      )?;
 
       response_listeners
         .lock()

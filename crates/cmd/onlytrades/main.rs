@@ -1,3 +1,4 @@
+mod bot;
 mod client;
 mod ctx;
 mod env;
@@ -19,8 +20,8 @@ use kit_ctrader_socket::ApplicationAuthReq;
 use kit_ctrader_socket::CTraderRequestType;
 use kit_ctrader_socket::connection::CTraderConnection;
 use kit_ctrader_socket::connection::CTraderConnectionOptions;
-use kit_turso::TursoDb;
 use kit_std_ext::PathExt;
+use kit_turso::TursoDb;
 use platform_ctrader_service::CTraderService;
 use platform_data_view_turso::ProfileDataView;
 use platform_log_service::LogService;
@@ -41,9 +42,7 @@ use uuid::Uuid;
 async fn main() -> anyhow::Result<()> {
   let env = Arc::new(Env::from_env()?);
 
-  let cwd = &std::env::current_exe()?
-    .try_parent()?
-    .join("tmp");
+  let cwd = &std::env::current_exe()?.try_parent()?.join("tmp");
 
   let tmp_fs = TempFs::new(&cwd).await?;
 
@@ -107,10 +106,13 @@ async fn main() -> anyhow::Result<()> {
   let profile_id = Uuid::parse_str("019e955c-e10a-7b92-acd2-5bbb9d70c0a8")?;
   let account_id: i64 = std::env::var("CTRADER_ACCOUNT_ID")?.parse()?;
 
-  let conn = ctrader_service.new_connection(&profile_id, &account_id).await?;
+  let conn = ctrader_service
+    .new_connection(&profile_id, &account_id)
+    .await?;
 
-  tokio::time::sleep(Duration::from_secs(10)).await;
-  
+  // bot::handler(conn, account_id).await?;
+
+  tokio::time::sleep(Duration::from_secs(100)).await;
 
   // let ctrader_service = Arc::new(CTraderService::new(
   //   &env.app_origin,

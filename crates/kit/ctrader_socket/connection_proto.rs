@@ -1,10 +1,13 @@
 use std::fmt::Debug;
 use std::sync::Arc;
 use std::time::Duration;
+use std::time::SystemTime;
+use std::time::UNIX_EPOCH;
 
 use kit_ctrader_proto::ProtoHeartbeatEvent;
 use kit_ctrader_proto::ProtoMessage;
 use kit_ctrader_proto::ProtoOaPayloadType;
+use kit_ctrader_proto::ProtoOaVersionReq;
 use kit_ctrader_proto::ProtoPayloadType;
 use prost::Message;
 use serde::Deserialize;
@@ -123,6 +126,7 @@ impl CTraderConnectionRaw {
         // println!("<- {} [HB]", result.payload_type);
         continue;
       }
+      // println!("<- {}", result.payload_type);
 
       listeners
         .lock()
@@ -136,7 +140,7 @@ impl CTraderConnectionRaw {
     &self,
     msg: ProtoMessage,
   ) -> std::result::Result<(), ProtoError> {
-    println!("-> {} [{:?}]", msg.payload_type, msg.client_msg_id);
+    // println!("-> {} [{:?}]", msg.payload_type, msg.client_msg_id);
 
     let encoded = msg.encode_to_vec();
     let frame = add_be_header(encoded);
@@ -155,6 +159,33 @@ impl CTraderConnectionRaw {
     let (tx, rx) = tokio::sync::mpsc::unbounded_channel::<ProtoMessage>();
     self.listeners.lock().await.push(tx);
     rx
+  }
+
+  pub async fn latency(&self) -> anyhow::Result<u128> {
+    let now_ms = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
+
+    let id = format!("latency::internal::{}", now_ms);
+
+    let message = ProtoMessage {
+      payload_type: ProtoOaPayloadType::ProtoOaVersionReq.as_u32(),
+      payload: Some(ProtoOaVersionReq::default().encode_to_vec()),
+      client_msg_id: Some(id.clone()),
+    };
+
+    let mut rx = self.subscribe().await;
+
+    let _ = self.send(message).await;
+    let version_event = ProtoOaPayloadType::ProtoOaVersionRes.as_u32();
+
+    while let Some(msg) = rx.recv().await {
+      if msg.payload_type == version_event && msg.client_msg_id.as_ref().is_some_and(|m| m == &id) {
+        let recv_ms = SystemTime::now().duration_since(UNIX_EPOCH)?.as_millis();
+
+        return Ok(recv_ms - now_ms);
+      }
+    }
+
+    Err(anyhow::anyhow!("Could not get latency"))
   }
 }
 

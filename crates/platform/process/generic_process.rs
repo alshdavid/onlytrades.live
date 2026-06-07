@@ -16,13 +16,8 @@ use uuid::Uuid;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum SandboxType {
-  None {
-    command: Vec<String>,
-  },
-  Podman {
-    image: String,
-    command: Vec<String>,
-  },
+  None { command: Vec<String> },
+  Podman { image: String, command: Vec<String> },
 }
 
 enum ProcessType {
@@ -170,9 +165,7 @@ impl GenericProcess {
 
   async fn command(options: &GenericProcessOptions) -> anyhow::Result<(ProcessType, Command)> {
     match &options.sandbox {
-      SandboxType::None {
-        command,
-      } => {
+      SandboxType::None { command } => {
         let mut command = command.clone();
 
         let arg0 = command.remove(0);
@@ -250,16 +243,15 @@ impl GenericProcess {
   }
 }
 
-
 pub struct TempFs {
-  root_dir: PathBuf
+  root_dir: PathBuf,
 }
 
 impl TempFs {
   pub async fn new(root_dir: &Path) -> anyhow::Result<Self> {
     tokio::fs::create_dir_all(&root_dir).await?;
     Ok(Self {
-      root_dir: root_dir.to_path_buf()
+      root_dir: root_dir.to_path_buf(),
     })
   }
 
@@ -269,18 +261,22 @@ impl TempFs {
 }
 
 impl Drop for TempFs {
-    fn drop(&mut self) {
-        if !self.root_dir.exists() {
-            return;
-        }
-
-        if let Err(e) = std::fs::remove_dir_all(&self.root_dir) {
-            eprintln!("Warning: Failed to clean up TempFs directory: {}", e);
-        }
+  fn drop(&mut self) {
+    if !self.root_dir.exists() {
+      return;
     }
+
+    if let Err(e) = std::fs::remove_dir_all(&self.root_dir) {
+      eprintln!("Warning: Failed to clean up TempFs directory: {}", e);
+    }
+  }
 }
 
-pub async fn create_temp_file(cwd: &Path, name: &str, bytes: &[u8]) -> anyhow::Result<PathBuf> {
+pub async fn create_temp_file(
+  cwd: &Path,
+  name: &str,
+  bytes: &[u8],
+) -> anyhow::Result<PathBuf> {
   let bin_name = kit_hash::sha256(bytes);
   let tmp_file = cwd.join(&bin_name);
 

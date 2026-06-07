@@ -28,10 +28,10 @@ async fn main(ctx: Context) -> Result<(), Box<dyn std::error::Error>> {
           }
           Ok(CTraderResponseType::ExecutionEvent(_ev)) => {
             println!("ExecutionEvent")
-          },
+          }
           Ok(_ev) => {
             panic!()
-          },
+          }
           Err(_) => panic!(),
         };
         println!();

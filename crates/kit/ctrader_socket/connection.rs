@@ -44,4 +44,8 @@ impl CTraderConnection {
   ) -> std::result::Result<(), ProtoError> {
     self.conn.send(Into::<ProtoMessage>::into(message)).await
   }
+
+  pub async fn latency(&self) -> anyhow::Result<u128> {
+    self.conn.latency().await
+  }
 }
