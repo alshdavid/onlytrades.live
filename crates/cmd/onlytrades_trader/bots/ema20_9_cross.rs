@@ -46,7 +46,7 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         relative_stop_loss: Some(1_000_000),
         relative_take_profit: Some(2_000_000),
         trailing_stop_loss: Some(true),
-        volume: 10,
+        volume: ctx.volume,
         ..NewOrderReq::default()
       })
       .await?;
@@ -70,7 +70,7 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         relative_stop_loss: Some(1_000_000),
         relative_take_profit: Some(2_000_000),
         trailing_stop_loss: Some(true),
-        volume: 10,
+        volume: ctx.volume,
         ..NewOrderReq::default()
       })
       .await?;

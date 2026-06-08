@@ -29,6 +29,10 @@ static BOT_07: i64 = 47550886; // 5297229
 static BOT_08: i64 = 47550901; // 5297230 
 static BOT_09: i64 = 47550907; // 5297231 
 
+///   "XAUUSD": 10000     = 1 Lot
+///   "US500":  100       = 1 Lot
+///   "EURUSD": 10000000  = 1 Lot
+
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
   let env = Arc::new(Env::from_env()?);
@@ -87,6 +91,7 @@ async fn main() -> anyhow::Result<()> {
     BOT_01,
     "US500",
     TrendbarPeriod::M1,
+    10,
   )));
 
   h.push(tokio::task::spawn(run_strategy(
@@ -97,6 +102,7 @@ async fn main() -> anyhow::Result<()> {
     BOT_02,
     "US500",
     TrendbarPeriod::M1,
+    10,
   )));
 
   h.push(tokio::task::spawn(run_strategy(
@@ -107,6 +113,7 @@ async fn main() -> anyhow::Result<()> {
     BOT_03,
     "US500",
     TrendbarPeriod::H1,
+    10,
   )));
 
   h.push(tokio::task::spawn(run_strategy(
@@ -117,6 +124,7 @@ async fn main() -> anyhow::Result<()> {
     BOT_04,
     "XAUUSD",
     TrendbarPeriod::M1,
+    1000,
   )));
 
   h.push(tokio::task::spawn(run_strategy(
@@ -127,6 +135,7 @@ async fn main() -> anyhow::Result<()> {
     BOT_05,
     "XAUUSD",
     TrendbarPeriod::H1,
+    1000,
   )));
 
   // Algos should never finish

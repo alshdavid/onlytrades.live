@@ -75,7 +75,7 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         order_type: OrderType::Market,
         trade_side: TradeSide::Buy,
         relative_stop_loss: Some(sl_relative), // broker-side backstop only
-        volume: 10,
+        volume: ctx.volume,
         ..NewOrderReq::default()
       })
       .await?;
@@ -97,7 +97,7 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         order_type: OrderType::Market,
         trade_side: TradeSide::Sell,
         relative_stop_loss: Some(sl_relative), // broker-side backstop only
-        volume: 10,
+        volume: ctx.volume,
         ..NewOrderReq::default()
       })
       .await?;

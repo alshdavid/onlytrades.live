@@ -19,6 +19,7 @@ pub async fn run_strategy<F, Fut>(
   account_id: i64,
   symbol_name: &str,
   timeframe: TrendbarPeriod,
+  volume: i64,
 ) -> anyhow::Result<()>
 where
   F: 'static + Fn(Ctx) -> Fut,
@@ -64,6 +65,7 @@ where
       account_id: account_id.clone(),
       symbol: symbol.clone(),
       state: Arc::clone(&state),
+      volume,
     };
 
     strategy_func(ctx).await?;
@@ -103,6 +105,7 @@ where
             account_id: account_id.clone(),
             symbol: symbol.clone(),
             state: Arc::clone(&state),
+            volume,
           };
 
           strategy_func(ctx).await?;
@@ -142,6 +145,7 @@ pub struct Ctx {
   pub conn: CTraderConnection,
   pub account_id: i64,
   pub symbol: LightSymbol,
+  pub volume: i64,
   pub state: Arc<Mutex<StrategyState>>,
 }
 
