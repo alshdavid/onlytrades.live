@@ -16,9 +16,11 @@ use serde::Serialize;
   IntoPrimitive,
   Serialize,
   Deserialize,
+  Default,
 )]
 #[repr(i32)]
 pub enum OrderType {
+  #[default]
   Market = 1,
   Limit = 2,
   Stop = 3,

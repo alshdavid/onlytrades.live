@@ -19,7 +19,12 @@ use kit_ctrader_socket::ApplicationAuthReq;
 use kit_ctrader_socket::CTraderConnectionUtils;
 use kit_ctrader_socket::CTraderRequestType;
 use kit_ctrader_socket::CTraderResponseType;
+use kit_ctrader_socket::ClosePositionReq;
+use kit_ctrader_socket::ExecutionEvent;
 use kit_ctrader_socket::LightSymbol;
+use kit_ctrader_socket::NewOrderReq;
+use kit_ctrader_socket::ReconcileReq;
+use kit_ctrader_socket::ReconcileRes;
 use kit_ctrader_socket::Trendbar;
 use kit_ctrader_socket::TrendbarPeriod;
 use kit_ctrader_socket::connection::CTraderConnection;
@@ -96,6 +101,65 @@ pub struct Ctx {
   symbol: LightSymbol,
 }
 
+impl Ctx {
+  pub fn prices(&self) -> Vec<i64> {
+    self.series.iter().map(|v| v.close_price()).collect()
+  }
+
+  pub async fn new_order(
+    &self,
+    req: NewOrderReq,
+  ) -> anyhow::Result<()> {
+    if !self.live {
+      return Ok(());
+    }
+
+    self.conn.new_order(req).await?;
+
+    Ok(())
+  }
+
+  pub async fn close_position(
+    &self,
+    req: ClosePositionReq,
+  ) -> anyhow::Result<()> {
+    if !self.live {
+      return Ok(());
+    }
+
+    self.conn.close_position(req).await?;
+
+    Ok(())
+  }
+
+  pub async fn close_all_positions(&self) -> anyhow::Result<()> {
+    if !self.live {
+      return Ok(());
+    }
+
+    for position in self.reconcile().await?.position {
+      self
+        .close_position(ClosePositionReq {
+          client_msg_id: None,
+          ctid_trader_account_id: self.account_id,
+          position_id: position.position_id,
+          volume: position.trade_data.volume,
+        })
+        .await?;
+    }
+
+    Ok(())
+  }
+
+  pub async fn reconcile(&self) -> anyhow::Result<ReconcileRes> {
+    if !self.live {
+      return Ok(ReconcileRes::default());
+    }
+
+    self.conn.reconcile(&self.account_id).await
+  }
+}
+
 pub async fn executor<F, Fut>(
   strategy_func: F,
   conn: CTraderConnection,
@@ -126,6 +190,7 @@ where
   let mut series = VecDeque::with_capacity(1000);
   for trendbar in historical {
     series.push_back(trendbar);
+    println!("* Old bar {:?}", trendbar.timestamp_locale());
 
     let ctx = Ctx {
       series: series.clone(),
@@ -138,6 +203,8 @@ where
     strategy_func(ctx).await?;
   }
 
+  let mut forming = None::<Trendbar>;
+
   while let Some(msg) = rx.recv().await {
     match msg {
       Ok(CTraderResponseType::SpotEvent(event)) => {
@@ -145,39 +212,96 @@ where
           continue;
         }
 
-        dbg!(&event.trendbar);
-        let Some(new_bar) = event.trendbar.first() else {
+        let Some(trendbar) = event
+          .trendbar
+          .into_iter()
+          .find(|t| t.period.is_some_and(|p| p == TrendbarPeriod::M1))
+        else {
+          println!("no trendbar");
           continue;
         };
 
-        // 1. Manage the series (Mutate forming or Push new)
-        if let Some(last_bar) = series.back_mut() {
-          if last_bar.utc_timestamp_in_minutes == new_bar.utc_timestamp_in_minutes {
-            // It's the same minute: Mutate the forming candle
-            *last_bar = new_bar.clone();
-          } else {
-            // It's a new minute: Push the new bar
-            dbg!(&new_bar);
-            series.push_back(new_bar.clone());
+        let Some(forming_trendbar) = forming else {
+          println!("* Forming Bar");
+          forming.replace(trendbar);
+          continue;
+        };
 
-            let ctx = Ctx {
-              series: series.clone(),
-              live: true,
-              conn: conn.clone(),
-              account_id: account_id.clone(),
-              symbol: symbol.clone(),
-            };
-            strategy_func(ctx).await?;
-          }
-        } else {
-          // Fallback if series was empty for some reason
-          series.push_back(new_bar.clone());
+        if trendbar.utc_timestamp_in_minutes != forming_trendbar.utc_timestamp_in_minutes {
+          println!("* New Bar");
+          series.push_back(trendbar);
+          let _ = forming.take();
+
+          let ctx = Ctx {
+            series: series.clone(),
+            live: true,
+            conn: conn.clone(),
+            account_id: account_id.clone(),
+            symbol: symbol.clone(),
+          };
+          strategy_func(ctx).await?;
         }
 
-        // 2. Keep the series at max capacity (e.g., 1000)
         while series.len() > 1000 {
           series.pop_front();
         }
+        // // dbg!(&event.trendbar);
+        // let Some(new_bar) = event.trendbar.first() else {
+        //   continue;
+        // };
+
+        // let Some(last_bar) = series.back_mut() else {
+        //   series.push_back(new_bar.clone());
+        //   continue;
+        // };
+
+        // if last_bar.utc_timestamp_in_minutes != new_bar.utc_timestamp_in_minutes {
+        //   println!("* New bar {:?}", last_bar.timestamp_locale());
+        //   series.push_back(new_bar.clone());
+
+        //   let ctx = Ctx {
+        //     series: series.clone(),
+        //     live: true,
+        //     conn: conn.clone(),
+        //     account_id: account_id.clone(),
+        //     symbol: symbol.clone(),
+        //   };
+        //   strategy_func(ctx).await?;
+        // }
+
+        // while series.len() > 1000 {
+        //   series.pop_front();
+        // }
+
+        // // 1. Manage the series (Mutate forming or Push new)
+        // if let Some(last_bar) = series.back_mut() {
+        //   if last_bar.utc_timestamp_in_minutes == new_bar.utc_timestamp_in_minutes {
+        //     // It's the same minute: Mutate the forming candle
+        //     *last_bar = new_bar.clone();
+        //   } else {
+        //     // It's a new minute: Push the new bar
+        //     // dbg!(&new_bar);
+        //     println!("* New bar {:?}", last_bar.timestamp_locale());
+        //     series.push_back(new_bar.clone());
+
+        //     let ctx = Ctx {
+        //       series: series.clone(),
+        //       live: true,
+        //       conn: conn.clone(),
+        //       account_id: account_id.clone(),
+        //       symbol: symbol.clone(),
+        //     };
+        //     strategy_func(ctx).await?;
+        //   }
+        // } else {
+        //   // Fallback if series was empty for some reason
+        //   series.push_back(new_bar.clone());
+        // }
+
+        // // 2. Keep the series at max capacity (e.g., 1000)
+        // while series.len() > 1000 {
+        //   series.pop_front();
+        // }
 
         // 3. Update the strategy with the new state
         // let ctx = Ctx { series: series.clone() };

@@ -16,9 +16,11 @@ use serde::Serialize;
   IntoPrimitive,
   Deserialize,
   Serialize,
+  Default,
 )]
 #[repr(i32)]
 pub enum TradeSide {
+  #[default]
   Buy = 1,
   Sell = 2,
 }

@@ -4,7 +4,7 @@ use super::Order;
 use super::Position;
 
 /// * The response to the ProtoOAReconcileReq request.
-#[derive(Debug, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
+#[derive(Debug, Default, ::serde::Serialize, ::serde::Deserialize, Clone, PartialEq)]
 pub struct ReconcileRes {
   pub client_msg_id: Option<String>,
   /// Unique identifier of the trader's account. Used to match responses to trader's accounts.
