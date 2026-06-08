@@ -28,7 +28,7 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
   // Open short if ema9 crosses below ema20
   if crossed_above {
     println!(
-      "🚀 BULLISH CROSSOVER detected! EMA9: {:.5} > EMA20: {:.5}",
+      "🚀 BULLISH CROSSOVER! EMA9: {:.0} > EMA20: {:.0}",
       current_ema9, current_ema20
     );
 
@@ -41,13 +41,16 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         symbol_id: ctx.symbol.symbol_id,
         order_type: OrderType::Market,
         trade_side: TradeSide::Buy,
+        relative_stop_loss: Some(20_000_000),
+        relative_take_profit: Some(10_000_000),
+        trailing_stop_loss: Some(true),
         volume: 10,
         ..NewOrderReq::default()
       })
       .await?;
   } else if crossed_below {
     println!(
-      "📉 BEARISH CROSSOVER detected! EMA9: {:.5} < EMA20: {:.5}",
+      "📉 BEARISH CROSSOVER! EMA9: {:.0} < EMA20: {:.0}",
       current_ema9, current_ema20
     );
 
@@ -60,6 +63,9 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         symbol_id: ctx.symbol.symbol_id,
         order_type: OrderType::Market,
         trade_side: TradeSide::Sell,
+        relative_stop_loss: Some(20_000_000),
+        relative_take_profit: Some(10_000_000),
+        trailing_stop_loss: Some(true),
         volume: 10,
         ..NewOrderReq::default()
       })

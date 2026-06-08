@@ -190,7 +190,7 @@ where
   let mut series = VecDeque::with_capacity(1000);
   for trendbar in historical {
     series.push_back(trendbar);
-    println!("* Old bar {:?}", trendbar.timestamp_locale());
+    println!("* Old bar     {:?}", trendbar.timestamp_locale());
 
     let ctx = Ctx {
       series: series.clone(),
@@ -217,18 +217,16 @@ where
           .into_iter()
           .find(|t| t.period.is_some_and(|p| p == TrendbarPeriod::M1))
         else {
-          println!("no trendbar");
           continue;
         };
 
         let Some(forming_trendbar) = forming else {
-          println!("* Forming Bar");
+          println!("* Forming bar {:?}", trendbar.timestamp_locale());
           forming.replace(trendbar);
           continue;
         };
 
         if trendbar.utc_timestamp_in_minutes != forming_trendbar.utc_timestamp_in_minutes {
-          println!("* New Bar");
           series.push_back(trendbar);
           let _ = forming.take();
 
