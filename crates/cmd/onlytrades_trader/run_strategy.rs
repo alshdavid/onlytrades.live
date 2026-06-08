@@ -12,6 +12,7 @@ use tokio::sync::Mutex;
 use crate::Env;
 
 pub async fn run_strategy<F, Fut>(
+  name: &str,
   env: Arc<Env>,
   ctrader_access_token: String,
   strategy_func: F,
@@ -59,6 +60,7 @@ where
     // println!("* Old bar     {:?}", trendbar.timestamp_locale());
 
     let ctx = Ctx {
+      name: name.to_string(),
       series: series.clone(),
       live: false,
       conn: conn.clone(),
@@ -99,6 +101,7 @@ where
           let _ = forming.take();
 
           let ctx = Ctx {
+            name: name.to_string(),
             series: series.clone(),
             live: true,
             conn: conn.clone(),
@@ -140,6 +143,7 @@ pub struct StrategyState {
 
 #[derive(Clone, Debug)]
 pub struct Ctx {
+  pub name: String,
   pub series: VecDeque<Trendbar>,
   pub live: bool,
   pub conn: CTraderConnection,

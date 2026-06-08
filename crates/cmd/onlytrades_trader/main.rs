@@ -84,6 +84,7 @@ async fn main() -> anyhow::Result<()> {
   // )));
 
   h.push(tokio::task::spawn(run_strategy(
+    "US EMA M1",
     env.clone(),
     settings.get_access_token(),
     bots::ema20_9_cross::strategy,
@@ -95,6 +96,7 @@ async fn main() -> anyhow::Result<()> {
   )));
 
   h.push(tokio::task::spawn(run_strategy(
+    "US MR M1",
     env.clone(),
     settings.get_access_token(),
     bots::mean_reversion::strategy,
@@ -106,6 +108,7 @@ async fn main() -> anyhow::Result<()> {
   )));
 
   h.push(tokio::task::spawn(run_strategy(
+    "US MR H1",
     env.clone(),
     settings.get_access_token(),
     bots::mean_reversion::strategy,
@@ -117,6 +120,7 @@ async fn main() -> anyhow::Result<()> {
   )));
 
   h.push(tokio::task::spawn(run_strategy(
+    "AU MR M1",
     env.clone(),
     settings.get_access_token(),
     bots::mean_reversion::strategy,
@@ -128,6 +132,7 @@ async fn main() -> anyhow::Result<()> {
   )));
 
   h.push(tokio::task::spawn(run_strategy(
+    "AU MR H1",
     env.clone(),
     settings.get_access_token(),
     bots::mean_reversion::strategy,

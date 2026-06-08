@@ -29,8 +29,8 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
   if crossed_above {
     if ctx.live {
       println!(
-        "🚀 BULLISH CROSSOVER! EMA9: {:.0} > EMA20: {:.0}",
-        current_ema9, current_ema20
+        "[{}] 🚀 BULLISH CROSSOVER! EMA9: {:.0} > EMA20: {:.0}",
+        ctx.name, current_ema9, current_ema20
       );
     }
 
@@ -53,8 +53,8 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
   } else if crossed_below {
     if ctx.live {
       println!(
-        "📉 BEARISH CROSSOVER! EMA9: {:.0} < EMA20: {:.0}",
-        current_ema9, current_ema20
+        "[{}] 📉 BEARISH CROSSOVER! EMA9: {:.0} < EMA20: {:.0}",
+        ctx.name, current_ema9, current_ema20
       );
     }
 
