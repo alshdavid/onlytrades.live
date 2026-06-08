@@ -1,7 +1,7 @@
 use anyhow::Context;
 use kit_ctrader_socket::*;
 
-use crate::Ctx;
+use crate::run_strategy::Ctx;
 use crate::utils::ema::ExponentialMovingAverageExt;
 
 pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
@@ -27,10 +27,12 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
   // Open long if ema9 crosses over ema20
   // Open short if ema9 crosses below ema20
   if crossed_above {
-    println!(
-      "🚀 BULLISH CROSSOVER! EMA9: {:.0} > EMA20: {:.0}",
-      current_ema9, current_ema20
-    );
+    if ctx.live {
+      println!(
+        "🚀 BULLISH CROSSOVER! EMA9: {:.0} > EMA20: {:.0}",
+        current_ema9, current_ema20
+      );
+    }
 
     ctx.close_all_positions().await?;
 
@@ -41,18 +43,20 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         symbol_id: ctx.symbol.symbol_id,
         order_type: OrderType::Market,
         trade_side: TradeSide::Buy,
-        relative_stop_loss: Some(20_000_000),
-        relative_take_profit: Some(10_000_000),
+        relative_stop_loss: Some(1_000_000),
+        relative_take_profit: Some(2_000_000),
         trailing_stop_loss: Some(true),
         volume: 10,
         ..NewOrderReq::default()
       })
       .await?;
   } else if crossed_below {
-    println!(
-      "📉 BEARISH CROSSOVER! EMA9: {:.0} < EMA20: {:.0}",
-      current_ema9, current_ema20
-    );
+    if ctx.live {
+      println!(
+        "📉 BEARISH CROSSOVER! EMA9: {:.0} < EMA20: {:.0}",
+        current_ema9, current_ema20
+      );
+    }
 
     ctx.close_all_positions().await?;
 
@@ -63,8 +67,8 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         symbol_id: ctx.symbol.symbol_id,
         order_type: OrderType::Market,
         trade_side: TradeSide::Sell,
-        relative_stop_loss: Some(20_000_000),
-        relative_take_profit: Some(10_000_000),
+        relative_stop_loss: Some(1_000_000),
+        relative_take_profit: Some(2_000_000),
         trailing_stop_loss: Some(true),
         volume: 10,
         ..NewOrderReq::default()

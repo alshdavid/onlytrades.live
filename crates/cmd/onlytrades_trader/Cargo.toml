@@ -43,6 +43,7 @@ include_dir = { workspace = true }
 jsonwebtoken = { workspace = true, features = ["rust_crypto"] }
 libsql = { workspace = true }
 num_enum = { workspace = true }
+parking_lot = { workspace = true }
 prost = { workspace = true }
 reqwest = { workspace = true, features = ["json"] }
 serde = { workspace = true, features = ["derive"] }

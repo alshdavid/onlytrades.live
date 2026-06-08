@@ -2399,6 +2399,7 @@ dependencies = [
  "onlytrades_repository_turso",
  "onlytrades_std_ext",
  "onlytrades_turso",
+ "parking_lot",
  "prost 0.14.3",
  "reqwest",
  "serde",
