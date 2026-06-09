@@ -16,6 +16,11 @@ pub trait CTraderConnectionUtils {
     &self,
     account_id: i64,
   ) -> impl Future<Output = anyhow::Result<HashMap<String, LightSymbol>>>;
+  fn get_symbol(
+    &self,
+    account_id: i64,
+    symbol_ids: &[i64],
+  ) -> impl Future<Output = anyhow::Result<HashMap<i64, Symbol>>>;
   fn subscribe_spots(
     &self,
     account_id: i64,
@@ -74,8 +79,19 @@ impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
                   break;
                 }
               }
+              Ok(CTraderResponseType::ErrorRes(res)) => {
+                if let Some(msg_id) = &res.client_msg_id
+                  && msg_id == &id
+                {
+                  let _ = tx.send(Err(anyhow::anyhow!("{:?}", res)));
+                  break;
+                }
+              }
               Ok(_) => {}
-              Err(_) => panic!(),
+              Err(err) => {
+                let _ = tx.send(Err(anyhow::anyhow!("{:?}", err)));
+                break;
+              }
             }
           }
         }
@@ -126,8 +142,19 @@ impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
                   break;
                 }
               }
+              Ok(CTraderResponseType::ErrorRes(res)) => {
+                if let Some(msg_id) = &res.client_msg_id
+                  && msg_id == &id
+                {
+                  let _ = tx.send(Err(anyhow::anyhow!("{:?}", res)));
+                  break;
+                }
+              }
               Ok(_) => {}
-              Err(_) => break,
+              Err(err) => {
+                let _ = tx.send(Err(anyhow::anyhow!("{:?}", err)));
+                break;
+              }
             }
           }
         }
@@ -172,8 +199,19 @@ impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
                   break;
                 }
               }
+              Ok(CTraderResponseType::ErrorRes(res)) => {
+                if let Some(msg_id) = &res.client_msg_id
+                  && msg_id == &id
+                {
+                  let _ = tx.send(Err(anyhow::anyhow!("{:?}", res)));
+                  break;
+                }
+              }
               Ok(_) => {}
-              Err(_) => break,
+              Err(err) => {
+                let _ = tx.send(Err(anyhow::anyhow!("{:?}", err)));
+                break;
+              }
             }
           }
         }
@@ -221,8 +259,19 @@ impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
                   break;
                 }
               }
+              Ok(CTraderResponseType::ErrorRes(res)) => {
+                if let Some(msg_id) = &res.client_msg_id
+                  && msg_id == &id
+                {
+                  let _ = tx.send(Err(anyhow::anyhow!("{:?}", res)));
+                  break;
+                }
+              }
               Ok(_) => {}
-              Err(_) => break,
+              Err(err) => {
+                let _ = tx.send(Err(anyhow::anyhow!("{:?}", err)));
+                break;
+              }
             }
           }
         }
@@ -268,8 +317,19 @@ impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
                   break;
                 }
               }
+              Ok(CTraderResponseType::ErrorRes(res)) => {
+                if let Some(msg_id) = &res.client_msg_id
+                  && msg_id == &id
+                {
+                  let _ = tx.send(Err(anyhow::anyhow!("{:?}", res)));
+                  break;
+                }
+              }
               Ok(_) => {}
-              Err(_) => break,
+              Err(err) => {
+                let _ = tx.send(Err(anyhow::anyhow!("{:?}", err)));
+                break;
+              }
             }
           }
         }
@@ -343,13 +403,75 @@ impl<T: CTraderConnectionExt> CTraderConnectionUtils for T {
                 }
               }
               Ok(_) => {}
-              Err(_) => break,
+              Err(_) => {}
             }
           }
         }
       });
 
       rx_done.recv().await.context("No ReconcileRes received")?
+    }
+  }
+
+  fn get_symbol(
+    &self,
+    account_id: i64,
+    symbol_ids: &[i64],
+  ) -> impl Future<Output = anyhow::Result<HashMap<i64, Symbol>>> {
+    async move {
+      let mut rx_ctrader = self.subscribe().await;
+      let id = Uuid::new_v4().to_string();
+      let (tx, mut rx) = unbounded_channel::<anyhow::Result<SymbolByIdRes>>();
+
+      tokio::task::spawn({
+        let id = id.clone();
+
+        async move {
+          while let Some(msg) = rx_ctrader.recv().await {
+            match msg {
+              Ok(CTraderResponseType::SymbolByIdRes(res)) => {
+                if let Some(msg_id) = &res.client_msg_id
+                  && msg_id == &id
+                {
+                  let _ = tx.send(Ok(res));
+                  break;
+                }
+              }
+              Ok(CTraderResponseType::ErrorRes(res)) => {
+                if let Some(msg_id) = &res.client_msg_id
+                  && msg_id == &id
+                {
+                  let _ = tx.send(Err(anyhow::anyhow!("{:?}", res)));
+                  break;
+                }
+              }
+              Ok(_) => {}
+              Err(err) => {
+                let _ = tx.send(Err(anyhow::anyhow!("{:?}", err)));
+                break;
+              }
+            }
+          }
+        }
+      });
+
+      self
+        .send(CTraderRequestType::SymbolByIdReq(SymbolByIdReq {
+          client_msg_id: Some(id),
+          ctid_trader_account_id: account_id,
+          symbol_id: symbol_ids.to_vec(),
+        }))
+        .await?;
+
+      let res = rx.recv().await.context("")??;
+
+      let mut symbols = HashMap::new();
+
+      for sym in res.symbol {
+        symbols.insert(sym.symbol_id.clone(), sym);
+      }
+
+      Ok(symbols)
     }
   }
 }

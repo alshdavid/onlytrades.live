@@ -34,7 +34,14 @@ where
   let conn = connect_to_ctrader_socket(&env, &ctrader_access_token, &account).await?;
 
   let mut symbols = conn.get_symbol_list(account_id).await?;
-  let symbol = symbols.remove(symbol_name).context("symbol not found")?;
+  let light_symbol = symbols.remove(symbol_name).context("symbol not found")?;
+
+  let mut symbol = conn
+    .get_symbol(account_id, &[light_symbol.symbol_id])
+    .await?;
+  let Some(symbol) = symbol.remove(&light_symbol.symbol_id) else {
+    return Err(anyhow::anyhow!("Failed to get symbol"));
+  };
 
   let mut rx = conn.subscribe().await;
 
@@ -48,10 +55,7 @@ where
     .get_historical_trendbars(&account_id, &symbol.symbol_id, timeframe, 500)
     .await?;
 
-  println!(
-    "Starting Algo: {} / {} -> {}",
-    account_id, account.account_number, symbol_name
-  );
+  println!("Starting Algo: {} -> {}", name, symbol_name);
 
   let state = Arc::new(Mutex::new(StrategyState::default()));
   let mut series = VecDeque::with_capacity(1000);
@@ -65,12 +69,15 @@ where
       live: false,
       conn: conn.clone(),
       account_id: account_id.clone(),
+      symbol_name: symbol_name.to_string(),
       symbol: symbol.clone(),
       state: Arc::clone(&state),
       volume,
     };
 
-    strategy_func(ctx).await?;
+    if let Err(err) = strategy_func(ctx).await {
+      eprintln!("[{}] {:?}", name, err);
+    };
   }
 
   let mut forming = None::<Trendbar>;
@@ -106,12 +113,15 @@ where
             live: true,
             conn: conn.clone(),
             account_id: account_id.clone(),
+            symbol_name: symbol_name.to_string(),
             symbol: symbol.clone(),
             state: Arc::clone(&state),
             volume,
           };
 
-          strategy_func(ctx).await?;
+          if let Err(err) = strategy_func(ctx).await {
+            eprintln!("[{}] {:?}", name, err);
+          };
         }
 
         while series.len() > 1000 {
@@ -148,7 +158,8 @@ pub struct Ctx {
   pub live: bool,
   pub conn: CTraderConnection,
   pub account_id: i64,
-  pub symbol: LightSymbol,
+  pub symbol_name: String,
+  pub symbol: Symbol,
   pub volume: i64,
   pub state: Arc<Mutex<StrategyState>>,
 }

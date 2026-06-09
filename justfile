@@ -23,3 +23,11 @@ fmt:
 lint:
   cargo clippy
   npx tsc
+
+trader_run:
+  cargo build -p onlytrades_trader
+  clear
+  ./target/debug/onlytrades_trader
+
+trader_watch:
+  cargo watch -s "cargo build -p onlytrades_trader && clear && ./target/debug/onlytrades_trader"

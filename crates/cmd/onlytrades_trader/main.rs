@@ -1,5 +1,4 @@
 mod bots;
-mod ctx;
 mod env;
 mod measure_latency;
 mod run_strategy;
@@ -30,6 +29,7 @@ static BOT_08: i64 = 47550901; // 5297230
 static BOT_09: i64 = 47550907; // 5297231 
 
 ///   "XAUUSD": 10000     = 1 Lot
+///   "XAUUSD": 100     = 0.01 Lot
 ///   "US500":  100       = 1 Lot
 ///   "EURUSD": 10000000  = 1 Lot
 
@@ -108,38 +108,26 @@ async fn main() -> anyhow::Result<()> {
   )));
 
   h.push(tokio::task::spawn(run_strategy(
-    "US MR H1",
+    "GLD MR M1",
     env.clone(),
     settings.get_access_token(),
     bots::mean_reversion::strategy,
     accounts.clone(),
     BOT_03,
-    "US500",
-    TrendbarPeriod::H1,
-    10,
-  )));
-
-  h.push(tokio::task::spawn(run_strategy(
-    "AU MR M1",
-    env.clone(),
-    settings.get_access_token(),
-    bots::mean_reversion::strategy,
-    accounts.clone(),
-    BOT_04,
     "XAUUSD",
     TrendbarPeriod::M1,
     1000,
   )));
 
   h.push(tokio::task::spawn(run_strategy(
-    "AU MR H1",
+    "GLD MR M15",
     env.clone(),
     settings.get_access_token(),
     bots::mean_reversion::strategy,
     accounts.clone(),
-    BOT_05,
+    BOT_04,
     "XAUUSD",
-    TrendbarPeriod::H1,
+    TrendbarPeriod::M15,
     1000,
   )));
 

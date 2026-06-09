@@ -1,3 +1,4 @@
+use num_enum::TryFromPrimitive;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -32,7 +33,7 @@ pub struct Symbol {
   /// Symbol trading interval, specified in seconds starting from SUNDAY 00:00 in specified time zone.
   pub schedule: Vec<Interval>,
   /// Commission type. See ProtoOACommissionType for details.
-  pub commission_type: Option<i32>,
+  pub commission_type: Option<CommissionType>,
   /// Minimum allowed distance between stop loss and current market price.
   pub sl_distance: Option<u32>,
   /// Minimum allowed distance between take profit and current market price.
@@ -101,7 +102,10 @@ impl TryFrom<kit_ctrader_proto::ProtoOaSymbol> for Symbol {
       step_volume: symbol.step_volume,
       max_exposure: symbol.max_exposure,
       schedule: symbol.schedule.into_iter().map(Interval::from).collect(),
-      commission_type: symbol.commission_type,
+      commission_type: match symbol.commission_type {
+        Some(commission_type) => Some(CommissionType::try_from_primitive(commission_type)?),
+        None => None,
+      },
       sl_distance: symbol.sl_distance,
       tp_distance: symbol.tp_distance,
       gsl_distance: symbol.gsl_distance,
@@ -127,5 +131,55 @@ impl TryFrom<kit_ctrader_proto::ProtoOaSymbol> for Symbol {
       charge_swap_at_weekends: symbol.charge_swap_at_weekends,
       measurement_units: symbol.measurement_units,
     })
+  }
+}
+
+impl Symbol {
+  pub fn lots_to_volume(
+    &self,
+    lots: f64,
+  ) -> i64 {
+    let lot_size_cents = self.lot_size.unwrap_or(0);
+    (lots * lot_size_cents as f64).round() as i64
+  }
+
+  pub fn price_to_volume(
+    &self,
+    current_price: i64, // Always scaled by 100,000 from the Proto stream e.g. `1_000_00000 = 1,000.00000
+    amount: i64,        // Scaled by 100 (cents), eg 1_000_00 = 1,000.0
+  ) -> anyhow::Result<i64> {
+    if current_price == 0 {
+      return Err(anyhow::anyhow!("Cannot divide by zero"));
+    }
+
+    // Spotware raw data streams ALWAYS scale price by 10^5,
+    // while volume and cents use 10^2. They resolve to a fixed 100,000.
+    let proto_scaler = 100_000.0;
+
+    let result = ((amount as f64 / current_price as f64) * proto_scaler).round() as i64;
+
+    // Check against minimum broker constraints
+    if let Some(min_volume) = self.min_volume {
+      if result < min_volume {
+        return Err(anyhow::anyhow!(
+          "Calculated volume ({}) is lower than minimum volume ({})",
+          result,
+          min_volume
+        ));
+      }
+    }
+
+    // Check against maximum broker constraints
+    if let Some(max_volume) = self.max_volume {
+      if result > max_volume {
+        return Err(anyhow::anyhow!(
+          "Calculated volume ({}) is higher than maximum volume ({})",
+          result,
+          max_volume
+        ));
+      }
+    }
+
+    Ok(result)
   }
 }

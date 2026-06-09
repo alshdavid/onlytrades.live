@@ -74,8 +74,10 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         symbol_id: ctx.symbol.symbol_id,
         order_type: OrderType::Market,
         trade_side: TradeSide::Buy,
-        relative_stop_loss: Some(sl_relative), // broker-side backstop only
-        volume: ctx.volume,
+        relative_stop_loss: Some(sl_relative),
+        volume: ctx
+          .symbol
+          .price_to_volume(current_close as i64, 10_000_00)?,
         ..NewOrderReq::default()
       })
       .await?;
@@ -96,8 +98,10 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         symbol_id: ctx.symbol.symbol_id,
         order_type: OrderType::Market,
         trade_side: TradeSide::Sell,
-        relative_stop_loss: Some(sl_relative), // broker-side backstop only
-        volume: ctx.volume,
+        relative_stop_loss: Some(sl_relative),
+        volume: ctx
+          .symbol
+          .price_to_volume(current_close as i64, 10_000_00)?,
         ..NewOrderReq::default()
       })
       .await?;
@@ -111,14 +115,18 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
     let hit_stop_loss = long_stop_price.map_or(false, |sl| current_close <= sl);
 
     if hit_take_profit {
-      println!("[{}] ✅ LONG TP — price reverted to mean ({:.0})", ctx.name, bb_basis);
+      println!(
+        "[{}] ✅ LONG TP — price reverted to mean ({:.0})",
+        ctx.name, bb_basis
+      );
       ctx.close_all_positions().await?;
       state.long_stop_price = None;
       state.position = StrategyPosition::Flat;
     } else if hit_stop_loss {
       println!(
         "[{}] 🛑 LONG SL — stop loss hit at {:.0}",
-        ctx.name, long_stop_price.unwrap()
+        ctx.name,
+        long_stop_price.unwrap()
       );
       ctx.close_all_positions().await?;
       state.long_stop_price = None;
@@ -131,14 +139,18 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
     let hit_stop_loss = short_stop_price.map_or(false, |sl| current_close >= sl);
 
     if hit_take_profit {
-      println!("[{}] ✅ SHORT TP — price reverted to mean ({:.0})", ctx.name, bb_basis);
+      println!(
+        "[{}] ✅ SHORT TP — price reverted to mean ({:.0})",
+        ctx.name, bb_basis
+      );
       ctx.close_all_positions().await?;
       state.short_stop_price = None;
       state.position = StrategyPosition::Flat;
     } else if hit_stop_loss {
       println!(
         "[{}] 🛑 SHORT SL — stop loss hit at {:.0}",
-        ctx.name, short_stop_price.unwrap()
+        ctx.name,
+        short_stop_price.unwrap()
       );
       ctx.close_all_positions().await?;
       state.short_stop_price = None;

@@ -5,6 +5,8 @@ use crate::run_strategy::Ctx;
 use crate::utils::ema::ExponentialMovingAverageExt;
 
 pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
+  let current_close = *ctx.prices().last().context("Empty price series")?;
+
   // Calculate EMA
   let ema20 = ta::indicators::ExponentialMovingAverage::new(20)?.calculate(&ctx.series);
   let ema9 = ta::indicators::ExponentialMovingAverage::new(9)?.calculate(&ctx.series);
@@ -46,7 +48,7 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         relative_stop_loss: Some(1_000_000),
         relative_take_profit: Some(2_000_000),
         trailing_stop_loss: Some(true),
-        volume: ctx.volume,
+        volume: ctx.symbol.price_to_volume(current_close, 10_000_00)?,
         ..NewOrderReq::default()
       })
       .await?;
@@ -70,7 +72,7 @@ pub async fn strategy(ctx: Ctx) -> anyhow::Result<()> {
         relative_stop_loss: Some(1_000_000),
         relative_take_profit: Some(2_000_000),
         trailing_stop_loss: Some(true),
-        volume: ctx.volume,
+        volume: ctx.symbol.price_to_volume(current_close, 10_000_00)?,
         ..NewOrderReq::default()
       })
       .await?;
