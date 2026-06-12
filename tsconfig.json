@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "lib": ["ESNext"],
+    "types": ["./types_v1.d.ts"],
+    "jsx": "react",
+    "jsxFactory": "h",
+    
+  },
+  "include": [
+    "./example_bots/**/*.ts"
+  ]
+}
