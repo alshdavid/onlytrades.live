@@ -465,7 +465,7 @@ interface JsonObject {
   [key: string]: JsonValue;
 }
 
-interface JsonArray extends Array<JsonValue> {}
+interface JsonArray extends Array<JsonValue> { }
 
 // CORE
 declare class Context<
@@ -487,10 +487,6 @@ declare class Context<
 }
 
 // UTILS
-
-declare function lots_to_volume(symbol: TradeSymbol, lots: number): number
-declare function price_to_volume(symbol: TradeSymbol, amount: number): number
-
 declare class Console {
   log(...args: any[]): void;
   error(...args: any[]): void;
@@ -499,6 +495,10 @@ declare class Console {
 }
 declare var console: Console;
 
+declare function lots_to_volume(symbol: TradeSymbol, lots: number): number
+declare function price_to_volume(symbol: TradeSymbol, amount: number): number
+
+// TA
 declare class ExponentialMovingAverage {
   constructor(period: number);
   next(num: number): void;
@@ -511,4 +511,165 @@ declare class RelativeStrengthIndex {
   next(num: number): void;
   calculate(): Array<number>;
   static calculate(period: number, series: Array<Trendbar>): Array<number>;
+}
+
+type BollingerBandsResult = {
+  lower: number,
+  average: number,
+  upper: number
+}
+
+declare class BollingerBands {
+  constructor(period: number, multiplier: number);
+  next(num: number): void;
+  calculate(): Array<BollingerBandsResult>;
+  static calculate(period: number, multiplier: number, trendbars: Array<{ close: number }>): Array<BollingerBandsResult>;
+}
+
+declare class AverageTrueRange {
+  constructor(period: number);
+  next(num: number): void
+  calculate(): Array<number>
+  static calculate(period: number, trendbars: Array<Trendbar>): Array<number>
+}
+
+type ChandelierExitResult = {
+  long: number,
+  short: number,
+}
+
+declare class ChandelierExit {
+  constructor(period: number, multiplier: number);
+  next(num: number): void
+  calculate(): Array<ChandelierExitResult>;
+  static calculate(period: number, multiplier: number, trendbars: Array<Trendbar>): Array<ChandelierExitResult>;
+}
+
+declare class CommodityChannelIndex {
+  constructor(period: number)
+  next(high: number, low: number, close: number): void
+  calculate(): Array<number>
+  static calculate(period: number, trendbars: Array<{ high: number; low: number; close: number }>): Array<number>
+}
+
+declare class EfficiencyRatio {
+  constructor(period: number)
+  next(num: number): void
+  calculate(): Array<number>
+  static calculate(period: number, series: Array<{ close: number }>): Array<number>
+}
+
+
+declare class FastStochastic {
+  constructor(period: number)
+  next(high: number, low: number, close: number): void
+  calculate(): Array<number>
+  static calculate(period: number, trendbars: Array<{ high: number; low: number; close: number }>): Array<number>
+}
+
+type KeltnerChannelResult = {
+  average: number,
+  upper: number,
+  lower: number
+}
+
+declare class KeltnerChannel {
+  constructor(period: number, multiplier: number);
+  next(num: number): void
+  calculate(): Array<KeltnerChannelResult>
+  static calculate(period: number, multiplier: number, trendbars: Array<{ close: number }>): Array<KeltnerChannelResult>
+}
+
+declare class Maximum {
+  constructor(period: number)
+  next(num: number): void
+  calculate(): Array<number>
+  static calculate(period: number, series: Array<{ high: number }>): Array<number>
+}
+
+declare class MeanAbsoluteDeviation {
+  constructor(period: number)
+  next(num: number): void
+  calculate(): Array<number>
+  static calculate(period: number, series: Array<{ close: number }>): Array<number>
+}
+
+declare class Minimum {
+  constructor(period: number)
+  next(num: number): void
+  calculate(): Array<number>
+  static calculate(period: number, series: Array<{ low: number }>): Array<number>
+}
+
+declare class MoneyFlowIndex {
+  constructor(period: number)
+  next(high: number, low: number, close: number, volume: number): void
+  calculate(): Array<number>
+  static calculate(period: number, trendbars: Array<{ high: number; low: number; close: number; volume: number }>): Array<number>
+}
+
+type MacdResult = {
+  macd: number,
+  signal: number,
+  histogram: number
+}
+
+declare class MovingAverageConvergenceDivergence {
+  constructor(fastPeriod: number, slowPeriod: number, signalPeriod: number)
+  next(num: number): void
+  calculate(): Array<MacdResult>
+  static calculate(fastPeriod: number, slowPeriod: number, signalPeriod: number, trendbars: Array<{ close: number }>): Array<MacdResult>
+}
+
+declare class OnBalanceVolume {
+  next(close: number, volume: number): void
+  calculate(): Array<number>
+  static calculate(trendbars: Array<{ close: number; volume: number }>): Array<number>
+}
+
+type PpoResult = {
+  ppo: number,
+  signal: number,
+  histogram: number
+}
+
+declare class PercentagePriceOscillator {
+  constructor(fastPeriod: number, slowPeriod: number, signalPeriod: number)
+  next(num: number): void
+  calculate(): Array<PpoResult>
+  static calculate(fastPeriod: number, slowPeriod: number, signalPeriod: number, trendbars: Array<{ close: number }>): Array<PpoResult>
+}
+
+declare class RateOfChange {
+  constructor(period: number)
+  next(num: number): void
+  calculate(): Array<number>
+  static calculate(period: number, series: Array<{ close: number }>): Array<number>
+}
+
+declare class SimpleMovingAverage {
+  constructor(period: number)
+  next(num: number): void
+  calculate(): Array<number>
+  static calculate(period: number, series: Array<{ close: number }>): Array<number>
+}
+
+declare class SlowStochastic {
+  constructor(stochasticPeriod: number, emaPeriod: number)
+  next(high: number, low: number, close: number): void
+  calculate(): Array<number>
+  static calculate(stochasticPeriod: number, emaPeriod: number, trendbars: Array<{ high: number; low: number; close: number }>): Array<number>
+}
+
+declare class StandardDeviation {
+  constructor(period: number)
+  next(num: number): void
+  calculate(): Array<number>
+  static calculate(period: number, series: Array<{ close: number }>): Array<number>
+}
+
+declare class TrueRange {
+  next(high: number, low: number, close: number): void
+  calculate(): Array<number>
+  static calculate(trendbars: Array<{ high: number; low: number; close: number }>): Array<number>
 }
