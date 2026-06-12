@@ -11,6 +11,7 @@ const RSI_OVERBOUGHT = 70;
 const STOP_LOSS_PCT = 0.025; // 2.5%
 const VOLUME = 100;
 
+// This state starts out uninitialized and persists between `handler` runs
 type State = {
   position: "flat" | "long" | "short";
   long_stop_price?: number;
