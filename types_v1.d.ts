@@ -459,15 +459,23 @@ type ReconcileRes = {
   order: Order[];
 };
 
+type JsonValue = string | number | boolean | null | JsonArray | JsonObject;
+
+interface JsonObject {
+  [key: string]: JsonValue;
+}
+
+interface JsonArray extends Array<JsonValue> {}
+
 // CORE
-declare class Context<T = unknown> {
+declare class Context<T extends Record<string, JsonValue> = {}> {
   readonly account_id: number;
   readonly name: string;
   readonly live: boolean;
   readonly symbol_name: string;
   readonly symbol: TradeSymbol;
   readonly series: Array<Trendbar>;
-  state: T
+  state: Partial<T> 
   close_all_positions(): Promise<void>;
   close_position(options: ClosePositionReq): Promise<void>;
   new_order(options: NewOrderReq): Promise<void>;

@@ -11,10 +11,10 @@ const RSI_OVERBOUGHT = 70;
 const STOP_LOSS_PCT = 0.025; // 2.5%
 const VOLUME = 100;
 
-class State {
-  position: "flat" | "long" | "short" = "flat";
-  long_stop_price: number | undefined = undefined;
-  short_stop_price: number | undefined = undefined;
+type State = {
+  position: "flat" | "long" | "short";
+  long_stop_price?: number;
+  short_stop_price?: number;
 }
 
 // Runs on every candle close
