@@ -460,13 +460,14 @@ type ReconcileRes = {
 };
 
 // CORE
-declare class Context {
+declare class Context<T = unknown> {
   readonly account_id: number;
   readonly name: string;
   readonly live: boolean;
   readonly symbol_name: string;
-  readonly symbol: Readonly<TradeSymbol>;
-  readonly series: Readonly<Array<Readonly<Trendbar>>>;
+  readonly symbol: TradeSymbol;
+  readonly series: Array<Trendbar>;
+  state: T
   close_all_positions(): Promise<void>;
   close_position(options: ClosePositionReq): Promise<void>;
   new_order(options: NewOrderReq): Promise<void>;
@@ -486,12 +487,12 @@ declare class ExponentialMovingAverage {
   constructor(period: number);
   next(num: number): void;
   calculate(): Array<number>;
-  static calculate(period: number, series: Array<number>): Array<number>;
+  static calculate(period: number, series: Array<Trendbar>): Array<number>;
 }
 
 declare class RelativeStrengthIndex {
   constructor(period: number);
   next(num: number): void;
   calculate(): Array<number>;
-  static calculate(period: number, series: Array<number>): Array<number>;
+  static calculate(period: number, series: Array<Trendbar>): Array<number>;
 }

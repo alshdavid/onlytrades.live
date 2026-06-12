@@ -1,16 +1,8 @@
 // Runs on every candle close
 export default async function handler(ctx: Context) {
   // Calculate EMAs
-  const ema20Builder = new ExponentialMovingAverage(20);
-  const ema9Builder = new ExponentialMovingAverage(9);
-
-  for (const trendbar of ctx.series) {
-    ema20Builder.next(trendbar.close);
-    ema9Builder.next(trendbar.close);
-  }
-
-  const ema20 = ema20Builder.calculate();
-  const ema9 = ema9Builder.calculate();
+  const ema20 = ExponentialMovingAverage.calculate(20, ctx.series);
+  const ema9 = ExponentialMovingAverage.calculate(9, ctx.series);
 
   // Get EMA for current and last candles
   const current_ema20 = ema20[ema20.length - 1];
