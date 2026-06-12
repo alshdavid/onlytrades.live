@@ -487,6 +487,10 @@ declare class Context<
 }
 
 // UTILS
+
+declare function lots_to_volume(symbol: TradeSymbol, lots: number): number
+declare function price_to_volume(symbol: TradeSymbol, amount: number): number
+
 declare class Console {
   log(...args: any[]): void;
   error(...args: any[]): void;

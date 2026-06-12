@@ -38,7 +38,7 @@ export default async function handler(ctx: Context) {
       symbol_id: ctx.symbol.symbol_id,
       order_type: OrderType.MARKET,
       trade_side: TradeSide.SELL,
-      volume: 100,
+      volume: lots_to_volume(ctx.symbol, 1),
     });
   }
 }
