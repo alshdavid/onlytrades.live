@@ -468,14 +468,18 @@ interface JsonObject {
 interface JsonArray extends Array<JsonValue> {}
 
 // CORE
-declare class Context<T extends Record<string, JsonValue> = {}> {
+declare class Context<
+  State extends Record<string, JsonValue> = {},
+  Env extends JsonObject = {},
+> {
   readonly account_id: number;
   readonly name: string;
   readonly live: boolean;
   readonly symbol_name: string;
   readonly symbol: TradeSymbol;
   readonly series: Array<Trendbar>;
-  state: Partial<T> 
+  state: Partial<State>;
+  env: Env;
   close_all_positions(): Promise<void>;
   close_position(options: ClosePositionReq): Promise<void>;
   new_order(options: NewOrderReq): Promise<void>;
