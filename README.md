@@ -38,10 +38,4 @@ LLMs are great at writing algorithms, Rust algorithms in particular.
 
 TradingView webhooks are supported. Just set up a trigger and paste the trigger code as the webhook body.
 
-Currently only v5 PineScript is supported. For some reason, strategies written in PineScript v6 sends broken alert IDs.
-
-### Security & Performance
-
-Everything is sandboxed and scoped. Bots cannot access other trader information. I would still recommend only trading with a demo account.
-
-The service is written in Rust and has a low latency link to the broker server. Trades are executed over a persistent socket connect to the broker and each bot has its own socket connection.
+Currently only v5 PineScript is supported. For some reason, strategies written in PineScript v6 send broken alert IDs.
